@@ -5,28 +5,17 @@ Examples of applicant portfolio pages similar to a junior software engineer / QA
 | Name | Link | Role fit | Layout / style notes | Project ideas to borrow |
 |------|------|----------|----------------------|-------------------------|
 | Eneri Junior | https://eneri.dev/ | QA Engineer + Java Developer | Strong hero, code-themed intro, clear section navigation, grouped skills, experience timeline, project/lab cards. | QA automation labs, API tests, E2E tests, CI/CD reports, backend demo apps. |
-| Sasadhri Rao | https://www.sasadhri.com/ | QA Engineer / Software Tester | Direct hiring-focused headline, concise skills grid, simple CTA, project cards with measurable testing outcomes. | API testing framework, e-commerce Playwright suite, banking/security testing suite. |
-| Ankit Ved | https://ankitved.dev/ | QA Engineer / Automation | Compact one-page portfolio with About, Projects, Experience, Resume, and Contact. Uses simple cards and stat callouts. | Portfolio website, Java desktop app, online voting system, QA/domain expertise blocks. |
-| Joshua Turner | https://jturner.dev/ | Junior Software Developer | Clear junior positioning, section navigation, skill areas split by front end/back end/problem solving, numbered project showcase. | React/Firebase app, React/GraphQL app, Django/PostgreSQL app, smaller full-stack demos. |
-| Andrey Lappo | https://korb.github.io/qa-portfolio/qa/ | QA Engineer | Content-heavy QA case-study format with table of contents, evidence links, bug examples, and impact summaries. | Open-source issue portfolio, exploratory testing case studies, documentation/localization QA examples. |
-| Tayyab Akmal | https://tayyabakmal.com/ | QA Automation Engineer | Terminal/code-inspired layout, direct QA automation positioning, skills grouped by automation and AI tools, strong project/case-study section. | Playwright case studies, AI testing workflows, open-source resources, measurable QA outcomes. |
-| Reghina Allen | https://reghinaa.github.io/ | QA Automation Engineer | Very simple static portfolio focused almost entirely on test automation project links. Easy to scan and low-maintenance. | JavaScript test automation portfolio, Cucumber test suites, Allure reports, Excel-driven test data examples. |
-| LH QA Portfolio | https://lhdev.io/ | QA Automation Engineer | Clean personal portfolio with education, experience, skills by tool category, and QA-focused project areas. | Serenity-BDD, Cucumber, Cypress, Playwright, JavaScript/Java skill blocks. |
 | Dibash Chuke | https://dibashchuke.vercel.app/ | QA Automation Engineer | Project-first layout with concise intro, contact info, education, resume, and many QA project cards. | Cucumber BDD, JMeter API testing, Playwright + Pytest, Postman/Newman CI projects. |
-| Talha Sharif | https://www.talhasharif.com/ | SQA Engineer / Test Automation Engineer | Polished portfolio with strong hero, skill badges, experience, projects, awards, education, and recommendation sections. | Test automation, ETL/data validation, mobile/web testing, AI/ML testing, stakeholder-focused QA results. |
+| Nidhi Singh | https://nids0810.github.io/cars-blog/ | Frontend Developer · Irving, Texas | Project-oriented React portfolio/demo work with clear deployed links and recruiter-readable project framing. | React project cards, deployed demo links, concise frontend scope descriptions. |
+| Ryan Waltrip | https://www.twine.net/rwaltrip | Senior QA Automation Engineer · Saint Paul, Minnesota | QA-focused profile with a direct automation summary, tool coverage, and measurable framework outcomes. | Automation impact metrics, CI/CD framework notes, cross-browser/API coverage summaries. |
+| Brian Aytepe | https://techamana.com/talent/brian-aytepe | QA Automation Engineer · Kissimmee, Florida | Talent portfolio page with compact expertise tags, work history, and Playwright framework positioning. | Skill badges, Playwright framework examples, concise QA project summaries. |
+| Kenneth Peng | https://www.freelancer.co.uk/u/dataqualitypro/portfolio/endtoend-qa-automation-framework-13866343 | QA Engineer / Automation Specialist · Manassas Park, Virginia | Portfolio case-study page for an end-to-end QA automation framework with business impact. | Framework case study, evidence-first QA writeup, regression and API validation notes. |
+| David Stone | https://www.toptal.com/resume/david-stone | QA Engineer and Developer · Philadelphia, Pennsylvania | Resume-style portfolio with QA/developer positioning, project technologies, and client-facing delivery summaries. | Hybrid QA/developer positioning, project technology lists, concise delivery impact statements. |
 
 ## Saved Screenshots
 
 - Eneri Junior: `images/reference/eneri-junior.png`
-- Sasadhri Rao: `images/reference/sasadhri-rao.png`
-- Ankit Ved: `images/reference/ankit-ved.png`
-- Joshua Turner: `images/reference/joshua-turner.png`
-- Andrey Lappo: `images/reference/andrey-lappo.png`
-- Tayyab Akmal: `images/reference/tayyab-akmal.png`
-- Reghina Allen: `images/reference/reghina-allen.png`
-- LH QA Portfolio: `images/reference/lh-qa-portfolio.png`
 - Dibash Chuke: `images/reference/dibash-chuke.png`
-- Talha Sharif: `images/reference/talha-sharif.png`
 
 ## Useful Patterns
 
