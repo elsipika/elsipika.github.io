@@ -39,8 +39,10 @@ These three repos are showcased in the Projects tab and should be created separa
 | Repo | Description | Stack |
 |------|-------------|-------|
 | `elsipika/iot-solar-dashboard` | IoT device monitoring admin console | Next.js, TypeScript, Tailwind CSS |
-| `elsipika/playwright-qa-suite` | E2E test automation framework demo | Playwright, TypeScript, GitHub Actions |
+| `elsipika/qagogo-agent` | Playwright/Detox QA suite for web and mobile apps | React, React Native, Expo, Playwright, Detox |
 | `elsipika/ai-image-studio` | CNN image classifier web app | Python, PyTorch, VGG16, React, Flask |
+
+`qagogo-agent` is the most QA-focused showcase repo: it includes a BunnyBoard demo web app, a BunnyBoard Expo/React Native mobile app, Playwright browser flows, Detox native iOS E2E, static mobile checks, and documented seeded findings.
 
 ## File structure
 

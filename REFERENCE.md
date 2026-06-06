@@ -5,14 +5,14 @@ Examples of applicant portfolio pages similar to a junior software engineer / QA
 | Name | Link | Role fit | Layout / style notes | Project ideas to borrow |
 |------|------|----------|----------------------|-------------------------|
 | Eneri Junior | https://eneri.dev/ | QA Engineer + Java Developer | Strong hero, code-themed intro, clear section navigation, grouped skills, experience timeline, project/lab cards. | QA automation labs, API tests, E2E tests, CI/CD reports, backend demo apps. |
-| Sasadhri Rao | https://www.sasadhri.com/ | QA Engineer / Software Tester | Direct hiring-focused headline, concise skills grid, simple CTA, project cards with measurable testing outcomes. | API testing framework, e-commerce Selenium suite, banking/security testing suite. |
+| Sasadhri Rao | https://www.sasadhri.com/ | QA Engineer / Software Tester | Direct hiring-focused headline, concise skills grid, simple CTA, project cards with measurable testing outcomes. | API testing framework, e-commerce Playwright suite, banking/security testing suite. |
 | Ankit Ved | https://ankitved.dev/ | QA Engineer / Automation | Compact one-page portfolio with About, Projects, Experience, Resume, and Contact. Uses simple cards and stat callouts. | Portfolio website, Java desktop app, online voting system, QA/domain expertise blocks. |
 | Joshua Turner | https://jturner.dev/ | Junior Software Developer | Clear junior positioning, section navigation, skill areas split by front end/back end/problem solving, numbered project showcase. | React/Firebase app, React/GraphQL app, Django/PostgreSQL app, smaller full-stack demos. |
 | Andrey Lappo | https://korb.github.io/qa-portfolio/qa/ | QA Engineer | Content-heavy QA case-study format with table of contents, evidence links, bug examples, and impact summaries. | Open-source issue portfolio, exploratory testing case studies, documentation/localization QA examples. |
-| Tayyab Akmal | https://tayyabakmal.com/ | QA Automation Engineer | Terminal/code-inspired layout, direct QA automation positioning, skills grouped by automation and AI tools, strong project/case-study section. | Playwright/Selenium case studies, AI testing workflows, open-source resources, measurable QA outcomes. |
-| Reghina Allen | https://reghinaa.github.io/ | QA Automation Engineer | Very simple static portfolio focused almost entirely on test automation project links. Easy to scan and low-maintenance. | Selenium + Java portfolio, Cucumber test suites, Allure reports, Excel-driven test data examples. |
-| LH QA Portfolio | https://lhdev.io/ | QA Automation Engineer | Clean personal portfolio with education, experience, skills by tool category, and QA-focused project areas. | Selenium, Serenity-BDD, Cucumber, Cypress, Playwright, JavaScript/Java skill blocks. |
-| Dibash Chuke | https://dibashchuke.vercel.app/ | QA Automation Engineer | Project-first layout with concise intro, contact info, education, resume, and many QA project cards. | Cucumber BDD + Selenium, JMeter API testing, Playwright + Pytest, Postman/Newman CI projects. |
+| Tayyab Akmal | https://tayyabakmal.com/ | QA Automation Engineer | Terminal/code-inspired layout, direct QA automation positioning, skills grouped by automation and AI tools, strong project/case-study section. | Playwright case studies, AI testing workflows, open-source resources, measurable QA outcomes. |
+| Reghina Allen | https://reghinaa.github.io/ | QA Automation Engineer | Very simple static portfolio focused almost entirely on test automation project links. Easy to scan and low-maintenance. | JavaScript test automation portfolio, Cucumber test suites, Allure reports, Excel-driven test data examples. |
+| LH QA Portfolio | https://lhdev.io/ | QA Automation Engineer | Clean personal portfolio with education, experience, skills by tool category, and QA-focused project areas. | Serenity-BDD, Cucumber, Cypress, Playwright, JavaScript/Java skill blocks. |
+| Dibash Chuke | https://dibashchuke.vercel.app/ | QA Automation Engineer | Project-first layout with concise intro, contact info, education, resume, and many QA project cards. | Cucumber BDD, JMeter API testing, Playwright + Pytest, Postman/Newman CI projects. |
 | Talha Sharif | https://www.talhasharif.com/ | SQA Engineer / Test Automation Engineer | Polished portfolio with strong hero, skill badges, experience, projects, awards, education, and recommendation sections. | Test automation, ETL/data validation, mobile/web testing, AI/ML testing, stakeholder-focused QA results. |
 
 ## Saved Screenshots
@@ -35,3 +35,13 @@ Examples of applicant portfolio pages similar to a junior software engineer / QA
 - Treat projects as evidence, not just screenshots: include tech stack, what was tested/built, and measurable outcome when possible.
 - For QA projects, link to test code, reports, bug writeups, or reproducible test cases.
 - Keep the visual system simple enough for recruiters to scan quickly.
+
+## QAgogo Agent Portfolio Notes
+
+Use QAgogo as the main Playwright/Detox QA suite instead of a single-tool browser testing project.
+
+- Position it as a Playwright/Detox QA suite for local/demo web and mobile apps.
+- Mention Playwright for browser E2E, Detox for native iOS E2E, and source/static checks for mobile coverage.
+- Keep Android Detox described as scaffolded until a native Android build is generated.
+- Emphasize evidence: seeded bugs, reproducible flows, screenshots/reports, and readable QA findings.
+- Link to `elsipika/qagogo-agent` from the Projects tab and keep older generic suite references removed.

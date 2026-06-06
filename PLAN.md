@@ -23,7 +23,7 @@ Full-featured personal portfolio for Selina Sun, junior software and QA engineer
 ## Remaining / Next Steps
 
 - [ ] Create GitHub repo: `elsipika/iot-solar-dashboard` (Next.js IoT admin console)
-- [ ] Create GitHub repo: `elsipika/playwright-qa-suite` (Playwright E2E demo)
+- [ ] Publish/update GitHub repo: `elsipika/qagogo-agent` (web and mobile QA automation demo)
 - [ ] Create GitHub repo: `elsipika/ai-image-studio` (PyTorch image classifier)
 - [ ] Add LinkedIn profile URL to footer icon `href` (currently `#`)
 - [ ] Add a profile photo or custom avatar (replace Skitty GIF if desired, or keep for personality)
@@ -36,10 +36,11 @@ Full-featured personal portfolio for Selina Sun, junior software and QA engineer
 **Why:** Directly demonstrates SCRUM24 work — IoT device management, real-time data, modern frontend stack. Strongest signal of professional frontend experience.
 **Suggested scope:** Next.js app shell, sidebar nav, mock device list with status badges, simple line chart for telemetry, TypeScript throughout.
 
-### 2. Playwright QA Suite
-**Repo:** `elsipika/playwright-qa-suite`
-**Why:** Proves QA engineering skills beyond a resume bullet. Employers hiring for QA roles want to see actual test code.
-**Suggested scope:** 10–15 Playwright tests against a public demo site (e.g. SauceDemo), Page Object Model structure, GitHub Actions CI, HTML report artifact.
+### 2. Playwright/Detox QA Suite
+**Repo:** `elsipika/qagogo-agent`
+**Why:** Proves QA engineering skills across web and mobile with real automated flows, seeded bugs, and readable findings.
+**Current scope:** Local BunnyBoard web/mobile demo apps, Playwright web E2E, Detox native iOS E2E, source-based mobile checks, seeded product bugs, and report-ready QA findings.
+**Next polish:** Add screenshots/report artifacts to the README and keep Android Detox clearly marked as scaffolded until a native Android build is generated.
 
 ### 3. AI Image Studio
 **Repo:** `elsipika/ai-image-studio`
