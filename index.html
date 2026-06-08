@@ -13,6 +13,16 @@
         <meta property="twitter:card" content="summary_large_image"/>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,300italic" rel="stylesheet" type="text/css"/>
         <link href="https://fonts.googleapis.com/css?family=Space+Mono:400,400italic,700,700italic%7CVT323:400,400italic,700,700italic%7CRoboto+Condensed:300,300italic,400,400italic" rel="stylesheet" type="text/css"/>
+        <script>
+            (function() {
+                var storageKey = 'elsipika-theme';
+                var mode = 'system';
+                try { mode = localStorage.getItem(storageKey) || 'system'; } catch (e) {}
+                var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.dataset.themeMode = mode;
+                document.documentElement.dataset.theme = mode === 'system' ? (systemDark ? 'dark' : 'light') : mode;
+            }());
+        </script>
         <style>
             html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {
                 margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline;
@@ -311,6 +321,1269 @@
                 #icons01 { width: calc(100% + 0.5625rem); margin-left: -0.28125rem; }
                 #icons01 li { margin: 0.28125rem; }
             }
+
+            /* Portfolio refactor */
+            :root {
+                color-scheme: light;
+                --page-bg: #f5f2ec;
+                --page-overlay: rgba(245,242,236,0.78);
+                --surface: rgba(255,255,255,0.94);
+                --surface-strong: #ffffff;
+                --surface-muted: #f2eee7;
+                --border: rgba(46,54,66,0.16);
+                --text: #23262d;
+                --muted: #626b77;
+                --heading: #20252f;
+                --accent: #8d4fb8;
+                --accent-strong: #6f3696;
+                --accent-soft: rgba(141,79,184,0.14);
+                --success: #20745f;
+                --warning: #b86828;
+                --link: #6f3696;
+                --shadow: 0 24px 70px rgba(43,35,54,0.18);
+                --mono: 'Space Mono', monospace;
+                --display: 'VT323', monospace;
+                --body: 'Roboto Condensed', sans-serif;
+            }
+            html[data-theme="dark"] {
+                color-scheme: dark;
+                --page-bg: #111318;
+                --page-overlay: rgba(17,19,24,0.8);
+                --surface: rgba(27,31,38,0.94);
+                --surface-strong: #202630;
+                --surface-muted: #151a22;
+                --border: rgba(233,226,238,0.18);
+                --text: #f0edf3;
+                --muted: #b8b1c2;
+                --heading: #ffffff;
+                --accent: #d7a8ef;
+                --accent-strong: #f0c8ff;
+                --accent-soft: rgba(215,168,239,0.15);
+                --success: #7fd8ba;
+                --warning: #f0b06b;
+                --link: #f0c8ff;
+                --shadow: 0 28px 80px rgba(0,0,0,0.42);
+            }
+            body {
+                background: var(--page-bg);
+                color: var(--text);
+                line-height: 1.5;
+            }
+            body:before {
+                opacity: 0.42;
+                filter: saturate(0.72) contrast(0.95);
+            }
+            body:after { background-color: var(--page-bg); }
+            #wrapper {
+                justify-content: flex-start;
+                min-height: 100vh;
+                padding: 1.25rem;
+            }
+            #main {
+                width: min(100%, 62rem);
+                min-width: 0;
+                align-items: stretch;
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 0.5rem;
+                box-shadow: var(--shadow);
+                text-align: left;
+                backdrop-filter: blur(20px);
+            }
+            #main > .inner {
+                width: 100%;
+                min-width: 0;
+                border: 0;
+                padding: 1.1rem;
+            }
+            #main > .inner > section,
+            .hero-layout,
+            .hero-copy,
+            .hero-panel,
+            .content-panel,
+            .project-card,
+            .work-item,
+            .skill-group,
+            .code-card,
+            .profile-chip {
+                min-width: 0;
+            }
+            #main > .inner > header {
+                position: sticky;
+                top: 0;
+                z-index: 30;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.75rem;
+                background: var(--surface);
+                margin-bottom: 1rem;
+                padding-top: 0.1rem;
+                padding-bottom: 0.9rem;
+                border-bottom: 1px solid var(--border);
+                backdrop-filter: blur(18px);
+            }
+            #main > .inner > footer {
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid var(--border);
+            }
+            #main > .inner > * > * {
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+            }
+            .top-nav { flex: 1 1 auto; min-width: 0; }
+            #buttons01 {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+                width: auto;
+                margin: 0;
+            }
+            #buttons01 li {
+                display: block;
+                margin: 0;
+                max-width: none;
+            }
+            #buttons01 li a {
+                width: auto;
+                min-width: 4.8rem;
+                height: 2rem;
+                line-height: 2rem;
+                padding: 0 0.8rem;
+                border-radius: 0.35rem;
+                font-family: var(--mono);
+                font-size: 0.52em;
+                font-weight: 700;
+                letter-spacing: 0;
+            }
+            #buttons01 .button {
+                color: var(--muted);
+                border: 1px solid var(--border);
+                background: var(--surface-strong);
+            }
+            #buttons01 .button:hover,
+            #buttons01 .button:focus-visible {
+                color: var(--accent-strong) !important;
+                border-color: var(--accent) !important;
+                background: var(--accent-soft);
+            }
+            #buttons01 .button.is-active {
+                color: var(--heading) !important;
+                border-color: var(--accent) !important;
+                background: var(--accent-soft);
+                box-shadow: inset 0 -2px 0 var(--accent);
+            }
+            .theme-switch {
+                display: flex;
+                align-items: center;
+                gap: 0.2rem;
+                padding: 0.2rem;
+                border: 1px solid var(--border);
+                border-radius: 0.35rem;
+                background: var(--surface-muted);
+            }
+            .theme-switch button {
+                appearance: none;
+                border: 0;
+                border-radius: 0.25rem;
+                padding: 0.45rem 0.55rem;
+                background: transparent;
+                color: var(--muted);
+                cursor: pointer;
+                font-family: var(--mono);
+                font-size: 0.48em;
+                font-weight: 700;
+                line-height: 1;
+                text-transform: uppercase;
+            }
+            .theme-switch button:hover,
+            .theme-switch button:focus-visible {
+                color: var(--accent-strong);
+                outline: 1px solid var(--accent);
+                outline-offset: 1px;
+            }
+            .theme-switch button.is-active {
+                color: var(--heading);
+                background: var(--surface-strong);
+                box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+            }
+            .game-section {
+                margin-top: 1rem !important;
+                margin-bottom: 1rem !important;
+            }
+            .header-game {
+                display: grid;
+                grid-template-columns: minmax(11rem, 0.7fr) minmax(18rem, 1.3fr);
+                gap: 0.65rem;
+                padding: 0.7rem;
+                border: 1px solid var(--border);
+                border-radius: 0.45rem;
+                background: var(--surface-muted);
+            }
+            .game-panel {
+                display: grid;
+                gap: 0.55rem;
+                min-width: 0;
+            }
+            .game-title {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.45rem;
+                margin: 0;
+                color: var(--heading);
+                font-family: var(--display);
+                font-size: 1.2em;
+                line-height: 1;
+            }
+            .game-title span {
+                color: var(--accent-strong);
+            }
+            .game-welcome {
+                margin: -0.25rem 0 0;
+                color: #d11f3a;
+                font-family: var(--mono);
+                font-size: 1.74em;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+            .game-instructions {
+                margin: -0.1rem 0 0;
+                color: var(--heading);
+                font-family: var(--mono);
+                font-size: 0.62em;
+                font-weight: 700;
+                line-height: 1.45;
+                text-transform: uppercase;
+            }
+            .game-stats {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.35rem;
+            }
+            .game-stat {
+                min-height: 2.6rem;
+                padding: 0.45rem;
+                border: 1px solid var(--border);
+                border-radius: 0.3rem;
+                background: var(--surface-strong);
+            }
+            .game-stat strong {
+                display: block;
+                color: var(--heading);
+                font-family: var(--display);
+                font-size: 1.25em;
+                line-height: 1;
+            }
+            .game-stat span {
+                display: block;
+                margin-top: 0.18rem;
+                color: var(--muted);
+                font-family: var(--mono);
+                font-size: 0.45em;
+                line-height: 1.2;
+                text-transform: uppercase;
+            }
+            .game-message {
+                min-height: 2.75rem;
+                margin: 0;
+                color: var(--muted);
+                font-family: var(--body);
+                font-size: 0.74em;
+                line-height: 1.45;
+            }
+            .game-log-panel {
+                min-height: 0;
+                padding: 0.55rem;
+                border: 1px solid var(--border);
+                border-radius: 0.35rem;
+                background: var(--surface-strong);
+            }
+            .game-log-title {
+                display: flex;
+                justify-content: space-between;
+                gap: 0.5rem;
+                margin: 0 0 0.35rem;
+                color: var(--heading);
+                font-family: var(--mono);
+                font-size: 0.52em;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+            .game-log {
+                max-height: 5.9rem;
+                overflow-y: auto;
+                padding-right: 0.35rem;
+                color: var(--muted);
+                font-family: var(--body);
+                font-size: 0.68em;
+                line-height: 1.35;
+            }
+            .game-log li + li {
+                margin-top: 0.3rem;
+            }
+            .game-log time {
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.82em;
+                font-weight: 700;
+            }
+            .game-controls {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+            }
+            .game-reset {
+                justify-self: start;
+                min-height: 1.75rem;
+                padding: 0 0.65rem;
+                border: 1px solid var(--accent);
+                border-radius: 0.3rem;
+                background: var(--accent-soft);
+                color: var(--accent-strong);
+                cursor: pointer;
+                font-family: var(--mono);
+                font-size: 0.48em;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+            .game-reset:hover,
+            .game-reset:focus-visible {
+                background: var(--accent-strong);
+                color: var(--surface-strong);
+                outline: none;
+            }
+            .game-reset:disabled {
+                cursor: default;
+                opacity: 0.48;
+                background: var(--surface-muted);
+                color: var(--muted);
+                border-color: var(--border);
+            }
+            .rabbit-tunnel {
+                position: relative;
+                min-height: 14rem;
+                padding: 0.8rem 0.7rem 0.65rem;
+                border: 1px solid var(--border);
+                border-radius: 0.4rem;
+                background:
+                    linear-gradient(180deg, rgba(141,79,184,0.11) 0 22%, transparent 22%),
+                    var(--surface-strong);
+                overflow: hidden;
+            }
+            .rabbit-runner {
+                position: absolute;
+                left: var(--rabbit-left, 0.75rem);
+                top: var(--rabbit-top, 0.7rem);
+                width: 2.6rem;
+                height: 2.6rem;
+                display: block;
+                padding: 0.18rem;
+                border: 1px solid var(--border);
+                border-radius: 0.8rem;
+                background: var(--accent-soft);
+                transition: left 1.35s ease, top 1.35s ease, transform 1.05s ease;
+                animation: rabbit-hop 2.1s ease-in-out infinite;
+                z-index: 2;
+            }
+            .rabbit-runner img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                border-radius: 0.55rem;
+                display: block;
+            }
+            .rabbit-runner:after {
+                content: attr(data-action-label);
+                position: absolute;
+                left: 50%;
+                top: -0.85rem;
+                transform: translateX(-50%);
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.44em;
+                font-weight: 700;
+                white-space: nowrap;
+                text-transform: uppercase;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+            .rabbit-runner.action-smell:after,
+            .rabbit-runner.action-think:after {
+                opacity: 1;
+            }
+            .rabbit-runner.action-roll {
+                transform: rotate(360deg);
+            }
+            .rabbit-runner.action-think {
+                transform: translateY(-0.12rem);
+            }
+            .game-cursor {
+                position: absolute;
+                left: var(--cursor-left, 1.8rem);
+                top: var(--cursor-top, 2.95rem);
+                width: 1.25rem;
+                height: 1.25rem;
+                display: grid;
+                place-items: center;
+                color: var(--accent-strong);
+                filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+                pointer-events: none;
+                transition: left 1.35s ease, top 1.35s ease;
+                z-index: 3;
+            }
+            @keyframes rabbit-hop {
+                0%, 100% { margin-top: 0; }
+                50% { margin-top: -0.28rem; }
+            }
+            .tunnel-track {
+                display: grid;
+                grid-template-columns: repeat(var(--choice-count, 3), minmax(0, 1fr));
+                gap: 0.4rem;
+                height: 100%;
+                padding-top: 3.45rem;
+            }
+            .tunnel-choice {
+                min-width: 0;
+                min-height: 9.25rem;
+                padding: 0.35rem 0.25rem 0.45rem;
+                border: 1px solid var(--border);
+                border-radius: 0.35rem;
+                background: var(--surface-muted);
+                color: var(--heading);
+                cursor: pointer;
+                font-family: var(--mono);
+                font-size: 0.52em;
+                font-weight: 700;
+                line-height: 1.2;
+                text-transform: uppercase;
+            }
+            .tunnel-image {
+                display: block;
+                width: min(100%, 5.4rem);
+                height: 5.8rem;
+                margin: 0.1rem auto 0.25rem;
+                object-fit: contain;
+            }
+            .tunnel-choice:focus-visible {
+                outline: 2px solid var(--accent);
+                outline-offset: 2px;
+            }
+            .tunnel-choice.is-hot {
+                border-color: var(--accent);
+                background: var(--accent-soft);
+                box-shadow: 0 0 0 2px rgba(141,79,184,0.12);
+            }
+            .tunnel-choice.is-selected {
+                border-color: var(--accent);
+                box-shadow: inset 0 -2px 0 var(--accent);
+            }
+            .tunnel-choice.is-revealed {
+                background: var(--surface-strong);
+            }
+            .tunnel-choice:disabled {
+                cursor: default;
+                opacity: 0.72;
+            }
+            .choice-symbol {
+                display: block;
+                margin-bottom: 0.2rem;
+                font-size: 2.3rem;
+                line-height: 1;
+            }
+            .hero-layout {
+                display: grid;
+                grid-template-columns: minmax(0, 1.12fr) minmax(15rem, 0.88fr);
+                gap: 1rem;
+                align-items: stretch;
+            }
+            .hero-copy,
+            .hero-panel,
+            .content-panel,
+            .project-card,
+            .work-item,
+            .skill-group {
+                background: var(--surface-strong);
+                border: 1px solid var(--border);
+                border-radius: 0.45rem;
+            }
+            .hero-copy {
+                padding: 1.35rem;
+            }
+            .hero-panel {
+                display: flex;
+                flex-direction: column;
+                gap: 0.85rem;
+                padding: 1rem;
+                background: linear-gradient(145deg, var(--surface-strong), var(--surface-muted));
+            }
+            .status-row,
+            .hero-tags,
+            .evidence-list,
+            .work-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+            }
+            .status-pill,
+            .hero-tags span,
+            .evidence-list span,
+            .work-tags span {
+                display: inline-flex;
+                align-items: center;
+                min-height: 1.45rem;
+                padding: 0.18rem 0.45rem;
+                border: 1px solid var(--border);
+                border-radius: 0.25rem;
+                background: var(--accent-soft);
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.48em;
+                font-weight: 700;
+                line-height: 1.2;
+                text-transform: uppercase;
+            }
+            .status-pill {
+                color: var(--success);
+                background: rgba(32,116,95,0.12);
+            }
+            #text04 {
+                color: var(--heading);
+                font-family: var(--display);
+                font-size: clamp(2.6rem, 8vw, 5rem);
+                line-height: 0.9;
+                letter-spacing: 0;
+                margin: 0.5rem 0 0;
+            }
+            .section-kicker {
+                margin: 0 !important;
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.55em;
+                font-weight: 700;
+                letter-spacing: 0;
+                text-transform: uppercase;
+            }
+            .role-line {
+                margin-top: 0.6rem !important;
+                color: var(--heading);
+                font-family: var(--body);
+                font-size: 1.15em;
+                font-weight: 400;
+                line-height: 1.4;
+            }
+            #text03,
+            #text02,
+            .skill-list,
+            .project-card p,
+            .work-copy {
+                color: var(--text);
+                font-family: var(--body);
+            }
+            #text03,
+            #text02 {
+                line-height: 1.7;
+            }
+            .hero-summary {
+                max-width: 31rem;
+                color: var(--muted) !important;
+                font-size: 0.95em !important;
+            }
+            .hero-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.55rem;
+                margin-top: 1rem !important;
+            }
+            #buttons02 {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.55rem;
+                width: auto;
+                margin-left: 0;
+            }
+            #buttons02 li {
+                margin: 0;
+                max-width: none;
+            }
+            #buttons02 li a {
+                width: auto;
+                min-width: 7rem;
+                height: 2.35rem;
+                border-color: var(--accent);
+                color: var(--accent-strong);
+                background: var(--accent-soft);
+                font-family: var(--mono);
+                font-size: 0.52em;
+                font-weight: 700;
+                letter-spacing: 0;
+            }
+            #buttons02 li a:hover,
+            #buttons02 li a:focus-visible {
+                color: var(--surface-strong) !important;
+                border-color: var(--accent-strong) !important;
+                background: var(--accent-strong);
+            }
+            .metric-grid {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.55rem;
+                margin-top: 1rem !important;
+            }
+            .metric {
+                min-height: 4.2rem;
+                padding: 0.7rem;
+                border: 1px solid var(--border);
+                border-radius: 0.35rem;
+                background: var(--surface-muted);
+            }
+            .metric strong {
+                display: block;
+                color: var(--heading);
+                font-family: var(--display);
+                font-size: 1.8em;
+                line-height: 0.9;
+            }
+            .metric span {
+                display: block;
+                margin-top: 0.3rem;
+                color: var(--muted);
+                font-family: var(--mono);
+                font-size: 0.48em;
+                line-height: 1.3;
+                text-transform: uppercase;
+            }
+            .code-card {
+                flex: 1;
+                min-height: 15rem;
+                padding: 0.9rem;
+                border-radius: 0.35rem;
+                background: #151820;
+                color: #f7f1ff;
+                overflow: hidden;
+            }
+            .code-card p {
+                margin: 0;
+                color: #f7f1ff;
+                font-family: var(--mono);
+                font-size: 0.58em;
+                line-height: 1.7;
+                white-space: normal;
+                overflow-wrap: anywhere;
+            }
+            .code-card .muted { color: #8fa2b8; }
+            .code-card .key { color: #f0b06b; }
+            .code-card .value { color: #a8e6c9; }
+            .code-card .call { color: #d7a8ef; }
+            .profile-chip {
+                display: grid;
+                grid-template-columns: 4.5rem minmax(0, 1fr);
+                gap: 0.75rem;
+                align-items: center;
+                padding: 0.75rem;
+                border: 1px solid var(--border);
+                border-radius: 0.35rem;
+                background: var(--surface-strong);
+            }
+            .hero-title-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                margin-top: 0.35rem !important;
+            }
+            .hero-headshot {
+                flex: 0 0 auto;
+                width: 6rem;
+                height: 6.8rem;
+                object-fit: cover;
+                object-position: center;
+                border: 1px solid var(--border);
+                border-radius: 1.35rem;
+                background: var(--surface-muted);
+            }
+            #image02 {
+                margin: 0 !important;
+                overflow: visible;
+            }
+            #image02 span {
+                border-radius: 100%;
+            }
+            #image02 img {
+                width: 4.5rem;
+                height: 4.5rem;
+                object-fit: cover;
+                object-position: center;
+                border-radius: 100%;
+                border: 1px solid var(--border);
+                background: var(--surface-muted);
+            }
+            .profile-chip strong {
+                display: block;
+                color: var(--heading);
+                font-family: var(--mono);
+                font-size: 0.65em;
+            }
+            .profile-chip span {
+                display: block;
+                margin-top: 0.25rem;
+                color: var(--muted);
+                font-family: var(--body);
+                font-size: 0.76em;
+                line-height: 1.35;
+                overflow-wrap: anywhere;
+            }
+            .section-heading {
+                color: var(--heading);
+                font-family: var(--display);
+                font-size: 1.9em;
+                letter-spacing: 0;
+                line-height: 1;
+                text-align: left;
+                text-transform: none;
+            }
+            .section-intro {
+                max-width: 40rem;
+                color: var(--muted) !important;
+                font-size: 0.95em !important;
+            }
+            .skill-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 0.75rem;
+            }
+            .skill-group {
+                margin: 0 !important;
+                padding: 0.85rem;
+            }
+            .skill-label {
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.58em;
+                letter-spacing: 0;
+            }
+            .skill-list {
+                color: var(--muted);
+                font-size: 0.82em;
+                line-height: 1.55;
+            }
+            .focus-strip {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.75rem;
+            }
+            .content-panel {
+                padding: 0.85rem;
+            }
+            .content-panel strong {
+                display: block;
+                color: var(--heading);
+                font-family: var(--mono);
+                font-size: 0.62em;
+                text-transform: uppercase;
+            }
+            .content-panel span {
+                display: block;
+                margin-top: 0.35rem;
+                color: var(--muted);
+                font-family: var(--body);
+                font-size: 0.82em;
+                line-height: 1.55;
+            }
+            .work-list {
+                display: grid;
+                gap: 0.75rem;
+            }
+            .work-item {
+                padding: 1rem;
+            }
+            .work-item h3,
+            .project-card h3 {
+                color: var(--heading);
+                font-family: var(--display);
+                font-size: 1.55em;
+                letter-spacing: 0;
+                line-height: 1;
+            }
+            .work-meta {
+                margin-top: 0.25rem;
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.52em;
+                line-height: 1.45;
+                text-transform: uppercase;
+            }
+            .work-copy {
+                margin-top: 0.5rem;
+                color: var(--muted);
+                font-size: 0.84em;
+                line-height: 1.6;
+            }
+            .project-grid {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.75rem;
+            }
+            .project-card {
+                display: flex;
+                flex-direction: column;
+                min-height: 20rem;
+                margin: 0 !important;
+                padding: 1rem;
+            }
+            .project-card p {
+                color: var(--muted);
+                font-size: 0.78em;
+                line-height: 1.58;
+            }
+            .tech-tags {
+                gap: 0.3rem;
+                margin: 0.75rem 0 0.55rem;
+            }
+            .tech-tag {
+                background: var(--surface-muted);
+                border-color: var(--border);
+                border-radius: 0.25rem;
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.46em;
+                letter-spacing: 0;
+            }
+            .project-footer {
+                margin-top: auto;
+                gap: 0.6rem;
+            }
+            .project-status {
+                color: var(--warning);
+                font-family: var(--mono);
+                font-size: 0.46em;
+            }
+            .project-link {
+                color: var(--link);
+                border-bottom-color: var(--accent);
+                font-family: var(--mono);
+                font-size: 0.48em;
+            }
+            .project-link:hover,
+            .project-link:focus-visible {
+                color: var(--heading) !important;
+                border-color: var(--heading);
+            }
+            .project-media-button,
+            .project-video-button {
+                display: block;
+                width: 100%;
+                border: 1px solid var(--border);
+                border-radius: 0.35rem;
+                background: var(--surface-muted);
+                color: var(--text);
+                cursor: pointer;
+                font: inherit;
+                margin: 0.75rem 0 0;
+                overflow: hidden;
+                padding: 0;
+                text-align: left;
+            }
+            .project-media-button img {
+                display: block;
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                object-fit: cover;
+            }
+            .project-video-thumb {
+                position: relative;
+                display: block;
+            }
+            .project-video-thumb img {
+                display: block;
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                object-fit: cover;
+            }
+            .project-video-play {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 3rem;
+                height: 3rem;
+                border-radius: 999px;
+                background: rgba(210, 31, 38, 0.92);
+                color: white;
+                font-family: var(--mono);
+                font-size: 1.15rem;
+                transform: translate(-50%, -50%);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+            }
+            .project-media-caption,
+            .project-video-caption {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.6rem;
+                padding: 0.55rem 0.65rem;
+                color: var(--link);
+                font-family: var(--mono);
+                font-size: 0.48em;
+                text-transform: uppercase;
+            }
+            .project-video-button {
+                padding: 0;
+            }
+            .project-media-button:hover,
+            .project-media-button:focus-visible,
+            .project-video-button:hover,
+            .project-video-button:focus-visible {
+                border-color: var(--accent);
+                outline: none;
+            }
+            .site-modal {
+                position: fixed;
+                inset: 0;
+                z-index: 40;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 1rem;
+            }
+            .site-modal.is-open {
+                display: flex;
+            }
+            .site-modal-backdrop {
+                position: absolute;
+                inset: 0;
+                background: rgba(9, 11, 15, 0.72);
+                backdrop-filter: blur(8px);
+            }
+            .site-modal-panel {
+                position: relative;
+                z-index: 1;
+                display: flex;
+                flex-direction: column;
+                width: min(100%, 64rem);
+                max-height: min(86vh, 46rem);
+                background: var(--surface-strong);
+                border: 1px solid var(--border);
+                border-radius: 0.5rem;
+                box-shadow: var(--shadow);
+                overflow: hidden;
+            }
+            .site-modal-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                padding: 0.75rem 0.9rem;
+                border-bottom: 1px solid var(--border);
+            }
+            .site-modal-header h3 {
+                margin: 0;
+                color: var(--heading);
+                font-family: var(--display);
+                font-size: 1.45em;
+                line-height: 1;
+            }
+            .site-modal-close {
+                width: 2rem;
+                height: 2rem;
+                border: 1px solid var(--border);
+                border-radius: 0.35rem;
+                background: var(--surface-muted);
+                color: var(--text);
+                cursor: pointer;
+                font-family: var(--mono);
+            }
+            .site-modal-frame {
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                border: 0;
+                background: var(--surface-muted);
+            }
+            .site-modal-video {
+                display: block;
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                background: #111827;
+            }
+            .video-file-fallback {
+                display: none;
+                padding: 0.85rem;
+                background: var(--surface-muted);
+                text-align: center;
+            }
+            .video-file-fallback img {
+                display: block;
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                object-fit: cover;
+                border: 1px solid var(--border);
+                border-radius: 0.35rem;
+                background: var(--surface-strong);
+            }
+            .video-file-fallback p {
+                margin: 0.7rem 0 0;
+                color: var(--muted);
+                font-size: 0.78em;
+                line-height: 1.55;
+            }
+            .video-file-link {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 0.7rem;
+                padding: 0.5rem 0.75rem;
+                border: 1px solid var(--accent);
+                border-radius: 0.35rem;
+                color: var(--link);
+                font-family: var(--mono);
+                font-size: 0.52em;
+                font-weight: 700;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+            .site-modal.is-file-video .site-modal-frame {
+                display: none;
+            }
+            .site-modal.is-file-video .video-file-fallback {
+                display: block;
+            }
+            .deck-slideshow {
+                padding: 0.85rem;
+                background: var(--surface-muted);
+            }
+            .deck-slide-stage {
+                position: relative;
+            }
+            .deck-slide {
+                display: block;
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                object-fit: cover;
+                border: 1px solid var(--border);
+                border-radius: 0.35rem;
+                background: var(--surface-strong);
+            }
+            .deck-controls {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 0.65rem;
+            }
+            .deck-arrow {
+                position: absolute;
+                top: 50%;
+                z-index: 2;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 2.1rem;
+                height: 4.2rem;
+                border: 1px solid var(--border);
+                border-radius: 0.35rem;
+                background: rgba(255, 255, 255, 0.88);
+                color: var(--link);
+                cursor: pointer;
+                padding: 0;
+                transform: translateY(-50%);
+                box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+            }
+            html[data-theme="dark"] .deck-arrow {
+                background: rgba(32, 38, 48, 0.9);
+            }
+            .deck-arrow svg {
+                width: 0.9rem;
+                height: 1.7rem;
+                fill: currentColor;
+            }
+            .deck-arrow-prev {
+                left: 0.65rem;
+            }
+            .deck-arrow-next {
+                right: 0.65rem;
+            }
+            .deck-arrow:hover,
+            .deck-arrow:focus-visible {
+                border-color: var(--accent);
+                color: var(--accent-strong);
+                outline: none;
+            }
+            .deck-count {
+                color: var(--muted);
+                font-family: var(--mono);
+                font-size: 0.55em;
+            }
+            .site-modal-footer {
+                padding: 0.65rem 0.9rem;
+                border-top: 1px solid var(--border);
+                color: var(--muted);
+                font-size: 0.74em;
+            }
+            .site-modal-footer a {
+                color: var(--link);
+            }
+            hr#divider01 { display: none; }
+            #footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+            #footer .section-heading {
+                margin: 0 !important;
+                font-size: 1.35em;
+            }
+            #icons01 {
+                display: flex;
+                gap: 0.45rem;
+                width: auto;
+                margin: 0;
+            }
+            #icons01 li { margin: 0; }
+            #icons01 a {
+                border-color: var(--border);
+                background: var(--surface-strong);
+            }
+            #icons01 a svg { fill: var(--muted); }
+            #icons01 a:hover,
+            #icons01 a:focus-visible {
+                border-color: var(--accent) !important;
+            }
+            #icons01 a:hover svg,
+            #icons01 a:focus-visible svg {
+                fill: var(--accent-strong) !important;
+            }
+            @media (max-width: 900px) {
+                #main > .inner > header,
+                #footer {
+                    align-items: flex-start;
+                    flex-direction: column;
+                }
+                .hero-layout,
+                .project-grid {
+                    grid-template-columns: 1fr;
+                }
+                .project-card { min-height: auto; }
+            }
+            @media (max-width: 680px) {
+                html,
+                body {
+                    max-width: 100vw;
+                    overflow-x: hidden;
+                }
+                #wrapper {
+                    align-items: center;
+                    overflow-x: hidden;
+                    padding: 0.55rem;
+                    width: 100vw;
+                }
+                #main {
+                    width: calc(100vw - 1.1rem);
+                    max-width: calc(100vw - 1.1rem);
+                }
+                #main > .inner {
+                    padding: 0.75rem;
+                    width: 100%;
+                    max-width: 100%;
+                }
+                #main > .inner > section,
+                #main > .inner > header,
+                #main > .inner > footer,
+                .header-game,
+                .hero-layout,
+                .hero-copy,
+                .hero-panel,
+                .skill-grid,
+                .focus-strip,
+                .work-list,
+                .project-grid {
+                    width: 100%;
+                    max-width: calc(100vw - 2.6rem);
+                    overflow-x: hidden;
+                }
+                .hero-copy,
+                .hero-panel,
+                .project-card,
+                .work-item,
+                .skill-group,
+                .content-panel {
+                    padding: 0.8rem;
+                }
+                .skill-grid,
+                .focus-strip,
+                .metric-grid {
+                    grid-template-columns: 1fr;
+                }
+                #buttons01 li a {
+                    min-width: 0;
+                    width: auto;
+                    height: 1.85rem;
+                    padding: 0 0.55rem;
+                }
+                .theme-switch {
+                    width: 100%;
+                    justify-content: space-between;
+                }
+                .theme-switch button {
+                    flex: 1;
+                    min-width: 0;
+                    padding-left: 0.35rem;
+                    padding-right: 0.35rem;
+                }
+                .header-game {
+                    grid-template-columns: 1fr;
+                    padding: 0.55rem;
+                }
+                .game-stats {
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                }
+                .rabbit-tunnel {
+                    min-height: 12.5rem;
+                }
+                .tunnel-track {
+                    gap: 0.25rem;
+                }
+                .tunnel-choice {
+                    font-size: 0.44em;
+                    padding-left: 0.15rem;
+                    padding-right: 0.15rem;
+                    min-height: 8.25rem;
+                }
+                .tunnel-image {
+                    height: 4.9rem;
+                }
+                .role-line,
+                .hero-summary,
+                .section-intro,
+                .work-copy,
+                .project-card p {
+                    max-width: calc(100vw - 3.9rem);
+                    overflow-wrap: anywhere;
+                }
+                .code-card p,
+                .profile-chip span {
+                    max-width: calc(100vw - 7.8rem);
+                }
+                .hero-title-row {
+                    align-items: flex-start;
+                    gap: 0.7rem;
+                }
+                .hero-headshot {
+                    width: 4.6rem;
+                    height: 5.2rem;
+                    border-radius: 1rem;
+                }
+                .profile-chip {
+                    grid-template-columns: 3.8rem minmax(0, 1fr);
+                }
+                #image02 img {
+                    width: 3.8rem;
+                    height: 3.8rem;
+                }
+            }
         </style>
         <noscript>
             <style>
@@ -342,162 +1615,393 @@
 
                     <!-- Navigation -->
                     <header id="header">
-                        <ul id="buttons01" class="buttons">
-                            <li><a href="#home" class="button n01">Home</a></li>
-                            <li><a href="#about" class="button n02">About</a></li>
-                            <li><a href="#works" class="button n03">Works</a></li>
-                            <li><a href="#projects" class="button n04">Projects</a></li>
-                        </ul>
+                        <nav class="top-nav" aria-label="Portfolio sections">
+                            <ul id="buttons01" class="buttons">
+                                <li><a href="#home" class="button n01">Home</a></li>
+                                <li><a href="#about" class="button n02">Skills</a></li>
+                                <li><a href="#works" class="button n03">Experience</a></li>
+                                <li><a href="#projects" class="button n04">Projects</a></li>
+                                <li><a href="docs/cv_resume/Selina_Sun_Resume_20260414_cg1.pdf" class="button n05" target="_blank" rel="noopener" data-nav-id="resume">Resume</a></li>
+                                <li><a href="#mini-game" class="button n06" data-nav-id="mini-game">My Mini Game</a></li>
+                            </ul>
+                        </nav>
+                        <div class="theme-switch" role="group" aria-label="Theme">
+                            <button type="button" data-theme-choice="light">Light</button>
+                            <button type="button" data-theme-choice="dark">Dark</button>
+                            <button type="button" data-theme-choice="system">System</button>
+                        </div>
                     </header>
 
                     <!-- Home -->
                     <section id="home-section">
-                        <h1 id="text04">Selina Sun</h1>
-                        <p class="section-heading" style="letter-spacing:0.3rem;">software engineer · qa · creative</p>
-                        <div id="image02" class="image">
-                            <span><img src="images/skitty.gif" alt="Skitty"/></span>
+                        <div class="hero-layout">
+                            <div class="hero-copy">
+                                <div class="status-row">
+                                    <span class="status-pill">Open to software and QA roles</span>
+                                    <span class="status-pill">Bay Area · Remote</span>
+                                </div>
+                                <p class="section-kicker">Software engineer · QA automation · creative systems</p>
+                                <div class="hero-title-row">
+                                    <h1 id="text04">Selina Sun</h1>
+                                    <img class="hero-headshot" src="docs/cv_resume/elsipika_headshot.png" alt="Selina Sun headshot"/>
+                                </div>
+                                <p class="role-line">I build frontend products and the tests that keep them reliable.</p>
+                                <p id="text03" class="hero-summary">
+                                    Software engineer with experience in React, Vue, TypeScript, Playwright, and AI-assisted tooling.
+                                    I bring a QA mindset to product work: clear flows, reproducible bugs, maintainable automation, and user-focused UI.
+                                </p>
+                                <div class="hero-tags" aria-label="Core strengths">
+                                    <span>Frontend UI</span>
+                                    <span>Playwright</span>
+                                    <span>Detox</span>
+                                    <span>Bug triage</span>
+                                    <span>AI tooling</span>
+                                </div>
+                                <div class="hero-actions">
+                                    <ul id="buttons02" class="buttons">
+                                        <li><a href="docs/cv_resume/Selina_Sun_Resume_20260414_cg1.pdf" class="button" target="_blank" rel="noopener">Resume</a></li>
+                                        <li><a href="https://github.com/elsipika" class="button" target="_blank" rel="noopener">GitHub</a></li>
+                                    </ul>
+                                </div>
+                                <div class="metric-grid" aria-label="Portfolio highlights">
+                                    <div class="metric"><strong>2+</strong><span>years QA operations</span></div>
+                                    <div class="metric"><strong>3</strong><span>showcase projects</span></div>
+                                    <div class="metric"><strong>CS</strong><span>UC Santa Cruz</span></div>
+                                </div>
+                            </div>
+                            <aside class="hero-panel" aria-label="Developer profile">
+                                <div class="profile-chip">
+                                    <div id="image02" class="image">
+                                        <span><img src="images/skitty.gif" alt="Skitty"/></span>
+                                    </div>
+                                    <div>
+                                        <strong>Selina.currentFocus</strong>
+                                        <span>Frontend quality, mobile automation, and practical AI-assisted engineering workflows.</span>
+                                    </div>
+                                </div>
+                                <div class="code-card" aria-label="Profile code sample">
+                                    <p><span class="muted">const</span> selina = {</p>
+                                    <p>&nbsp;&nbsp;<span class="key">role</span>: <span class="value">"Software + QA Engineer"</span>,</p>
+                                    <p>&nbsp;&nbsp;<span class="key">stack</span>: [<span class="value">"React"</span>, <span class="value">"TypeScript"</span>, <span class="value">"Playwright"</span>, <span class="value">"Detox"</span>],</p>
+                                    <p>&nbsp;&nbsp;<span class="key">quality</span>: [<span class="value">"e2e"</span>, <span class="value">"triage"</span>, <span class="value">"reports"</span>],</p>
+                                    <p>&nbsp;&nbsp;<span class="call">build</span>() { return <span class="value">"usable, tested UI"</span>; }</p>
+                                    <p>};</p>
+                                </div>
+                            </aside>
                         </div>
-                        <p id="text03">
-                            Software engineer with experience in frontend development, test automation, and AI-assisted tooling.
-                            Builds reliable web &amp; mobile software using React, Vue.js, TypeScript, and Playwright.
-                            UCSC Computer Science graduate with a creative streak — art, game design, and robotics enthusiast.
-                        </p>
-                        <ul id="buttons02" class="buttons">
-                            <li><a href="docs/cv_resume/Selina_Sun_Resume_20260414_cg1.pdf" class="button" target="_blank" rel="noopener">Resume</a></li>
-                            <li><a href="https://github.com/elsipika" class="button" target="_blank" rel="noopener">GitHub</a></li>
-                        </ul>
+
+                        <div data-scroll-id="projects" aria-hidden="true"></div>
+
+                        <!-- Projects -->
+                        <div class="home-projects" role="region" aria-label="Showcase projects">
+                            <p class="section-heading">Showcase Projects</p>
+                            <p class="section-intro">
+                                Project cards are written like QA evidence: what was built, what was tested, and why it matters.
+                            </p>
+
+                            <div class="project-grid">
+                                <article class="project-card">
+                                    <h3>IoT Solar Dashboard</h3>
+                                    <p>Admin console for monitoring and controlling solar farm IoT devices in real time. Manages device status, telemetry data, and alerts to mirror production IoT workflows from SCRUM24.</p>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag">Next.js</span>
+                                        <span class="tech-tag">React</span>
+                                        <span class="tech-tag">TypeScript</span>
+                                        <span class="tech-tag">Tailwind CSS</span>
+                                    </div>
+                                    <div class="evidence-list">
+                                        <span>Device states</span>
+                                        <span>Telemetry UI</span>
+                                        <span>Auth flow</span>
+                                    </div>
+                                    <div class="project-footer">
+                                        <span class="project-status">In Progress</span>
+                                        <a href="https://github.com/elsipika/iot-solar-dashboard" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
+                                    </div>
+                                </article>
+
+                                <article class="project-card">
+                                    <h3>Playwright/Detox QA Suite</h3>
+                                    <p>QAgogo QA automation demo for BunnyBoard web and mobile apps. Runs Playwright browser flows, Detox native iOS E2E, static mobile checks, and report-ready bug findings for seeded product issues.</p>
+                                    <button type="button" class="project-media-button" data-open-modal="qagogo-deck-modal">
+                                        <img src="docs/projects/qagogo-agent/slides/slide-01.png" alt="QAgogo overview slide deck preview"/>
+                                        <span class="project-media-caption">Open overview slides <span>→</span></span>
+                                    </button>
+                                    <button type="button" class="project-video-button" data-open-modal="qagogo-web-video-modal">
+                                        <span class="project-video-thumb">
+                                            <img src="docs/projects/qagogo-agent/videos/qagogo-demo-web-poster.png" alt="QAgogo demo web video thumbnail"/>
+                                            <span class="project-video-play" aria-hidden="true">▶</span>
+                                        </span>
+                                        <span class="project-video-caption">Watch demo-web video <span>→</span></span>
+                                    </button>
+                                    <button type="button" class="project-video-button" data-open-modal="qagogo-mobile-video-modal">
+                                        <span class="project-video-thumb">
+                                            <img src="docs/projects/qagogo-agent/videos/qagogo-demo-mobile-poster.png" alt="QAgogo demo mobile video thumbnail"/>
+                                            <span class="project-video-play" aria-hidden="true">▶</span>
+                                        </span>
+                                        <span class="project-video-caption">Watch demo-mobile video <span>→</span></span>
+                                    </button>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag">Playwright</span>
+                                        <span class="tech-tag">Detox</span>
+                                        <span class="tech-tag">React Native</span>
+                                        <span class="tech-tag">Expo</span>
+                                    </div>
+                                    <div class="evidence-list">
+                                        <span>Web E2E</span>
+                                        <span>iOS E2E</span>
+                                        <span>Bug reports</span>
+                                    </div>
+                                    <div class="project-footer">
+                                        <span class="project-status">Portfolio Demo</span>
+                                        <a href="https://github.com/elsipika/qagogo-agent" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
+                                    </div>
+                                </article>
+
+                                <article class="project-card">
+                                    <h3>Ormosa</h3>
+                                    <p>Local-first mobile agent harness for testing app workflows through a relay bridge, typed skills, and repeatable demos. Built as a practical sandbox for agent-driven QA on iOS and Android surfaces.</p>
+                                    <button type="button" class="project-media-button" data-open-modal="ormosa-deck-modal">
+                                        <img src="docs/projects/ormosa/slides/slide-01.png" alt="Ormosa overview slide deck preview"/>
+                                        <span class="project-media-caption">Open overview slides <span>→</span></span>
+                                    </button>
+                                    <button type="button" class="project-video-button" data-open-modal="ormosa-video-modal">
+                                        <span class="project-video-thumb">
+                                            <img src="https://img.youtube.com/vi/L4Z80qT9x2A/hqdefault.jpg" alt="Ormosa demo video thumbnail"/>
+                                            <span class="project-video-play" aria-hidden="true">▶</span>
+                                        </span>
+                                        <span class="project-video-caption">Watch Ormosa demo video <span>→</span></span>
+                                    </button>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag">TypeScript</span>
+                                        <span class="tech-tag">React Native</span>
+                                        <span class="tech-tag">Relay</span>
+                                        <span class="tech-tag">Agent QA</span>
+                                    </div>
+                                    <div class="evidence-list">
+                                        <span>Mobile harness</span>
+                                        <span>Bridge demo</span>
+                                        <span>Skill runtime</span>
+                                    </div>
+                                    <div class="project-footer">
+                                        <span class="project-status">Personal Project</span>
+                                        <a href="projects/ormosa/" class="project-link" target="_blank" rel="noopener">Open Project →</a>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div data-scroll-id="mini-game" aria-hidden="true"></div>
+
+                        <!-- Rabbit Tunnel Game -->
+                        <div class="game-section" role="region" aria-label="Rabbit tunnel mini game">
+                            <div class="header-game">
+                                <div class="game-panel">
+                                    <p class="game-title">Rabbit Tunnel <span>pick a path</span></p>
+                                    <p class="game-welcome">Welcome to try my mini game!</p>
+                                    <p class="game-instructions">Click "Start" to start the game<br/>"Click" the tunnel to select it.</p>
+                                    <div class="game-stats" aria-label="Game status">
+                                        <div class="game-stat"><strong id="rabbit-score">0</strong><span>Score</span></div>
+                                        <div class="game-stat"><strong id="rabbit-lives">1</strong><span>Lives</span></div>
+                                        <div class="game-stat"><strong id="rabbit-time">0:00</strong><span>Clock</span></div>
+                                    </div>
+                                    <p id="rabbit-message" class="game-message">Guide the rabbit into one tunnel. Treasure helps. Poop, snakes, lizards, and land mines do not.</p>
+                                    <div class="game-controls">
+                                        <button type="button" id="rabbit-start" class="game-reset">Start</button>
+                                        <button type="button" id="rabbit-stop" class="game-reset">Stop</button>
+                                        <button type="button" id="rabbit-restart" class="game-reset">Restart</button>
+                                    </div>
+                                    <div class="game-log-panel">
+                                        <p class="game-log-title">Event log <span>latest at bottom</span></p>
+                                        <ol id="rabbit-log" class="game-log" aria-live="polite"></ol>
+                                    </div>
+                                </div>
+                                <div class="rabbit-tunnel">
+                                    <div id="rabbit-runner" class="rabbit-runner" data-action-label="hop" aria-hidden="true">
+                                        <img src="images/rabbit.gif" alt=""/>
+                                    </div>
+                                    <div id="game-cursor" class="game-cursor" aria-hidden="true">⌄</div>
+                                    <div id="tunnel-track" class="tunnel-track" role="group" aria-label="Tunnel choices"></div>
+                                </div>
+                            </div>
+                        </div>
                     </section>
 
                     <!-- About -->
                     <section id="about-section">
-                        <div class="image">
-                            <img src="images/gameboy.gif" alt=""/>
-                        </div>
                         <p class="section-heading">Technical Skills</p>
-                        <div class="skill-group">
-                            <span class="skill-label">Web / Mobile</span>
-                            <p class="skill-list">React · Next.js · Vue.js · TypeScript · JavaScript ES6 · Tailwind CSS · SCSS/CSS/HTML · Bootstrap · Auth.js · NativeScript</p>
+                        <p id="text03" class="section-intro">
+                            A practical stack for building interfaces, testing flows, and communicating product risk clearly.
+                        </p>
+                        <div class="skill-grid">
+                            <div class="skill-group">
+                                <span class="skill-label">Web / Mobile</span>
+                                <p class="skill-list">React · Next.js · Vue.js · TypeScript · JavaScript ES6 · Tailwind CSS · SCSS/CSS/HTML · Bootstrap · Auth.js · NativeScript</p>
+                            </div>
+                            <div class="skill-group">
+                                <span class="skill-label">Testing / QA</span>
+                                <p class="skill-list">Playwright · Detox · End-to-End Testing · Integration Testing · Bug Triage · Issue Documentation · Release Support</p>
+                            </div>
+                            <div class="skill-group">
+                                <span class="skill-label">AI / ML</span>
+                                <p class="skill-list">PyTorch · LSTM · VGG16/CNN · Vibe Coding · Prompt Engineering · Claude Code · LLM · Jupyter · Pandas · NVIDIA GPU</p>
+                            </div>
+                            <div class="skill-group">
+                                <span class="skill-label">Backend / Cloud</span>
+                                <p class="skill-list">Node.js · Python · MySQL · Docker · CI/CD · Swagger · AWS · Unix/Ubuntu</p>
+                            </div>
+                            <div class="skill-group">
+                                <span class="skill-label">Tools</span>
+                                <p class="skill-list">Git · GitHub · Jira · Trello · Visual Studio Code · Photoshop · Illustrator</p>
+                            </div>
+                            <div class="skill-group">
+                                <span class="skill-label">Product QA</span>
+                                <p class="skill-list">Reproduction steps · Severity assessment · Regression coverage · Test evidence · Stakeholder handoff</p>
+                            </div>
                         </div>
-                        <div class="skill-group">
-                            <span class="skill-label">Testing / QA</span>
-                            <p class="skill-list">Playwright · Detox · End-to-End Testing · Integration Testing · Bug Triage · Issue Documentation · Release Support</p>
+                        <div class="focus-strip">
+                            <div class="content-panel"><strong>Interests</strong><span>Art &amp; design, animation, game development, robotics, writing, and bunnies.</span></div>
+                            <div class="content-panel"><strong>Languages</strong><span>English, 中文 Mandarin, and Español básico.</span></div>
+                            <div class="content-panel"><strong>Working style</strong><span>Calm debugging, clear documentation, small reproducible cases, and product-aware test coverage.</span></div>
                         </div>
-                        <div class="skill-group">
-                            <span class="skill-label">AI / ML</span>
-                            <p class="skill-list">PyTorch · LSTM · VGG16/CNN · Vibe Coding · Prompt Engineering · Claude Code · LLM · Jupyter · Pandas · NVIDIA GPU</p>
-                        </div>
-                        <div class="skill-group">
-                            <span class="skill-label">Backend / Cloud</span>
-                            <p class="skill-list">Node.js · Python · MySQL · Docker · CI/CD · Swagger · AWS · Unix/Ubuntu</p>
-                        </div>
-                        <div class="skill-group">
-                            <span class="skill-label">Tools</span>
-                            <p class="skill-list">Git · GitHub · Jira · Trello · Visual Studio Code · Photoshop · Illustrator</p>
-                        </div>
-                        <p class="section-heading">Interests</p>
-                        <p id="text03">Art &amp; Design · Animation · Game Development · Robotics · Writing · Bunnies</p>
-                        <p class="section-heading">Languages</p>
-                        <p id="text03">English · 中文 Mandarin · Español básico</p>
                     </section>
 
                     <!-- Works -->
                     <section id="works-section">
-                        <div class="image">
-                            <img src="images/laptop.gif" alt=""/>
-                        </div>
                         <p class="section-heading">Experience</p>
-                        <p id="text02" style="text-align:left;">
-                            <strong>Software Developer (Web/Mobile) · SCRUM24</strong><br/>
-                            <em style="color:rgba(255,255,255,0.6);font-size:0.88em;">Sunnyvale, CA · 2024–Present</em><br/>
-                            Built Next.js/React admin console for IoT device management with TypeScript, Tailwind CSS, and Auth.js.
-                            Supported Playwright E2E test automation and AI-assisted development workflows using Claude Code.
-                            Developed Vue/Vuex mobile interfaces for solar farm device monitoring.<br/>
-                            <br/>
-                            <strong>Software Quality Operations Associate · Waymo</strong><br/>
-                            <em style="color:rgba(255,255,255,0.6);font-size:0.88em;">Mountain View, CA · 2022–2024 (via Cognizant / Akorbi)</em><br/>
-                            Triaged rider-reported issues and documented bugs for engineering follow-up.
-                            Improved QC workflows and trained new team members on case analysis and issue escalation.<br/>
-                            <br/>
-                            <strong>Software Developer Intern · Trillion Innovations</strong><br/>
-                            <em style="color:rgba(255,255,255,0.6);font-size:0.88em;">Remote · 2020–2021</em><br/>
-                            Built frontend features with Vue.js, Bootstrap, and Ruby on Rails.
-                            Designed mockups and SVG animations; supported Swagger API integration for IoT workflows.<br/>
-                            <br/>
-                            <strong>Programming Mentor · Digital Media Academy</strong><br/>
-                            <em style="color:rgba(255,255,255,0.6);font-size:0.88em;">Stanford University · Summer 2018</em><br/>
-                            Mentored students in Java, animation, and Arduino/C++ fundamentals.
-                        </p>
+                        <div class="work-list">
+                            <article class="work-item">
+                                <h3>Software Developer (Web/Mobile) · SCRUM24</h3>
+                                <p class="work-meta">Sunnyvale, CA · 2024-Present</p>
+                                <p class="work-copy">Built Next.js/React admin console features for IoT device management with TypeScript, Tailwind CSS, and Auth.js. Supported Playwright E2E automation and AI-assisted development workflows using Claude Code. Developed Vue/Vuex mobile interfaces for solar farm device monitoring.</p>
+                                <div class="work-tags"><span>React</span><span>Next.js</span><span>Playwright</span><span>IoT</span></div>
+                            </article>
+                            <article class="work-item">
+                                <h3>Software Quality Operations Associate · Waymo</h3>
+                                <p class="work-meta">Mountain View, CA · 2022-2024 · Cognizant / Akorbi</p>
+                                <p class="work-copy">Triaged rider-reported issues, documented bugs for engineering follow-up, improved QC workflows, and trained new team members on case analysis and escalation standards.</p>
+                                <div class="work-tags"><span>Bug triage</span><span>Issue docs</span><span>QC workflow</span></div>
+                            </article>
+                            <article class="work-item">
+                                <h3>Software Developer Intern · Trillion Innovations</h3>
+                                <p class="work-meta">Remote · 2020-2021</p>
+                                <p class="work-copy">Built frontend features with Vue.js, Bootstrap, and Ruby on Rails. Designed mockups and SVG animations, and supported Swagger API integration for IoT workflows.</p>
+                                <div class="work-tags"><span>Vue</span><span>Bootstrap</span><span>Swagger</span><span>IoT</span></div>
+                            </article>
+                            <article class="work-item">
+                                <h3>Programming Mentor · Digital Media Academy</h3>
+                                <p class="work-meta">Stanford University · Summer 2018</p>
+                                <p class="work-copy">Mentored students in Java, animation, and Arduino/C++ fundamentals through project-based lessons.</p>
+                                <div class="work-tags"><span>Java</span><span>Arduino</span><span>Mentoring</span></div>
+                            </article>
+                        </div>
                         <p class="section-heading">Education</p>
-                        <p id="text02">
-                            <strong>B.S. Computer Science · UC Santa Cruz</strong><br/>
-                            2017–2020 · GPA 3.5<br/>
-                            Concentration in software engineering, AI/ML, and web/mobile development.<br/>
-                            Built VGG16/CNN models: brain hemorrhage subtype detection (92%) and clothing recognition (99%).
-                        </p>
+                        <div class="content-panel">
+                            <strong>B.S. Computer Science · UC Santa Cruz</strong>
+                            <span>2017-2020 · GPA 3.5 · Concentration in software engineering, AI/ML, and web/mobile development. Built VGG16/CNN models for brain hemorrhage subtype detection and clothing recognition.</span>
+                        </div>
                         <p class="section-heading">Certifications</p>
-                        <p id="text02" style="text-align:left;">
-                            · Playwright: Web Automation Testing From Zero to Hero<br/>
-                            · Claude Code Beginner to Pro: Agentic Coding for Developers<br/>
-                            · GenAI &amp; AI Agents for QA Automation<br/>
-                            · PyTorch for Deep Learning with Python Bootcamp
-                        </p>
-                    </section>
-
-                    <!-- Projects -->
-                    <section id="projects-section">
-                        <div class="image">
-                            <img src="images/laptop.gif" alt=""/>
-                        </div>
-                        <p class="section-heading">Showcase Projects</p>
-
-                        <div class="project-card">
-                            <h3>IoT Solar Dashboard</h3>
-                            <p>Admin console for monitoring and controlling solar farm IoT devices in real time. Manages device status, telemetry data, and alerts — built to mirror production IoT workflows from SCRUM24.</p>
-                            <div class="tech-tags">
-                                <span class="tech-tag">Next.js</span>
-                                <span class="tech-tag">React</span>
-                                <span class="tech-tag">TypeScript</span>
-                                <span class="tech-tag">Tailwind CSS</span>
-                                <span class="tech-tag">Node.js</span>
-                            </div>
-                            <div class="project-footer">
-                                <span class="project-status">In Progress</span>
-                                <a href="https://github.com/elsipika/iot-solar-dashboard" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
-                            </div>
-                        </div>
-
-                        <div class="project-card">
-                            <h3>Playwright/Detox QA Suite</h3>
-                            <p>QAgogo QA automation demo for BunnyBoard web and mobile apps. Runs Playwright browser flows, Detox native iOS E2E, static mobile checks, and report-ready bug findings for seeded product issues.</p>
-                            <div class="tech-tags">
-                                <span class="tech-tag">Playwright</span>
-                                <span class="tech-tag">Detox</span>
-                                <span class="tech-tag">React Native</span>
-                                <span class="tech-tag">Expo</span>
-                                <span class="tech-tag">QA Automation</span>
-                            </div>
-                            <div class="project-footer">
-                                <span class="project-status">Portfolio Demo</span>
-                                <a href="https://github.com/elsipika/qagogo-agent" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
-                            </div>
-                        </div>
-
-                        <div class="project-card">
-                            <h3>AI Image Studio</h3>
-                            <p>Web app powered by a fine-tuned VGG16/CNN model for image classification. Achieves 99% accuracy on fashion datasets. Built on UCSC research — features a React interface for real-time image upload and classification.</p>
-                            <div class="tech-tags">
-                                <span class="tech-tag">Python</span>
-                                <span class="tech-tag">PyTorch</span>
-                                <span class="tech-tag">VGG16</span>
-                                <span class="tech-tag">React</span>
-                                <span class="tech-tag">Flask</span>
-                            </div>
-                            <div class="project-footer">
-                                <span class="project-status">Personal Project</span>
-                                <a href="https://github.com/elsipika/ai-image-studio" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
-                            </div>
+                        <div class="focus-strip">
+                            <div class="content-panel"><strong>Playwright</strong><span>Web Automation Testing From Zero to Hero.</span></div>
+                            <div class="content-panel"><strong>Agentic coding</strong><span>Claude Code Beginner to Pro and GenAI &amp; AI Agents for QA Automation.</span></div>
+                            <div class="content-panel"><strong>Machine learning</strong><span>PyTorch for Deep Learning with Python Bootcamp.</span></div>
                         </div>
                     </section>
+
+                    <div id="qagogo-deck-modal" class="site-modal" role="dialog" aria-modal="true" aria-labelledby="qagogo-deck-title" aria-hidden="true">
+                        <div class="site-modal-backdrop" data-close-modal></div>
+                        <div class="site-modal-panel">
+                            <div class="site-modal-header">
+                                <h3 id="qagogo-deck-title">QAgogo Agent Overview</h3>
+                                <button type="button" class="site-modal-close" data-close-modal aria-label="Close QAgogo overview slides">×</button>
+                            </div>
+                            <div class="deck-slideshow" data-deck-slideshow data-deck-prefix="docs/projects/qagogo-agent/slides/slide-" data-deck-count-total="6">
+                                <div class="deck-slide-stage">
+                                    <img class="deck-slide" src="docs/projects/qagogo-agent/slides/slide-01.png" alt="QAgogo overview slide 1"/>
+                                    <button type="button" class="deck-arrow deck-arrow-prev" data-deck-prev aria-label="Previous slide">
+                                        <svg viewBox="0 0 24 40" aria-hidden="true"><path d="M18.5 4.5 6.5 20l12 15.5-4 3L.2 20 14.5 1.5z"/></svg>
+                                    </button>
+                                    <button type="button" class="deck-arrow deck-arrow-next" data-deck-next aria-label="Next slide">
+                                        <svg viewBox="0 0 24 40" aria-hidden="true"><path d="m5.5 4.5 12 15.5-12 15.5 4 3L23.8 20 9.5 1.5z"/></svg>
+                                    </button>
+                                </div>
+                                <div class="deck-controls">
+                                    <span class="deck-count" data-deck-count>1 / 6</span>
+                                </div>
+                            </div>
+                            <div class="site-modal-footer">Static PNG slides summarize the Playwright and Detox QA suite. Download the source deck: <a href="docs/projects/qagogo-agent/overview.pptx">overview.pptx</a>.</div>
+                        </div>
+                    </div>
+
+                    <div id="qagogo-web-video-modal" class="site-modal" role="dialog" aria-modal="true" aria-labelledby="qagogo-web-video-title" aria-hidden="true">
+                        <div class="site-modal-backdrop" data-close-modal></div>
+                        <div class="site-modal-panel">
+                            <div class="site-modal-header">
+                                <h3 id="qagogo-web-video-title">QAgogo Demo Web</h3>
+                                <button type="button" class="site-modal-close" data-close-modal aria-label="Close QAgogo demo web video">×</button>
+                            </div>
+                            <video class="site-modal-video" controls preload="metadata" poster="docs/projects/qagogo-agent/videos/qagogo-demo-web-poster.png">
+                                <source src="docs/projects/qagogo-agent/videos/qagogo-demo-web.mp4" type="video/mp4"/>
+                            </video>
+                            <div class="site-modal-footer">Local MP4 demo for BunnyBoard demo-web and QAgogo web findings.</div>
+                        </div>
+                    </div>
+
+                    <div id="qagogo-mobile-video-modal" class="site-modal" role="dialog" aria-modal="true" aria-labelledby="qagogo-mobile-video-title" aria-hidden="true">
+                        <div class="site-modal-backdrop" data-close-modal></div>
+                        <div class="site-modal-panel">
+                            <div class="site-modal-header">
+                                <h3 id="qagogo-mobile-video-title">QAgogo Demo Mobile</h3>
+                                <button type="button" class="site-modal-close" data-close-modal aria-label="Close QAgogo demo mobile video">×</button>
+                            </div>
+                            <video class="site-modal-video" controls preload="metadata" poster="docs/projects/qagogo-agent/videos/qagogo-demo-mobile-poster.png">
+                                <source src="docs/projects/qagogo-agent/videos/qagogo-demo-mobile.mp4" type="video/mp4"/>
+                            </video>
+                            <div class="site-modal-footer">Local MP4 storyboard for BunnyBoard Mobile and Detox coverage.</div>
+                        </div>
+                    </div>
+
+                    <div id="ormosa-deck-modal" class="site-modal" role="dialog" aria-modal="true" aria-labelledby="ormosa-deck-title" aria-hidden="true">
+                        <div class="site-modal-backdrop" data-close-modal></div>
+                        <div class="site-modal-panel">
+                            <div class="site-modal-header">
+                                <h3 id="ormosa-deck-title">Ormosa Overview</h3>
+                                <button type="button" class="site-modal-close" data-close-modal aria-label="Close Ormosa overview slides">×</button>
+                            </div>
+                            <div class="deck-slideshow" data-deck-slideshow data-deck-prefix="docs/projects/ormosa/slides/slide-" data-deck-count-total="7">
+                                <div class="deck-slide-stage">
+                                    <img class="deck-slide" src="docs/projects/ormosa/slides/slide-01.png" alt="Ormosa overview slide 1"/>
+                                    <button type="button" class="deck-arrow deck-arrow-prev" data-deck-prev aria-label="Previous slide">
+                                        <svg viewBox="0 0 24 40" aria-hidden="true"><path d="M18.5 4.5 6.5 20l12 15.5-4 3L.2 20 14.5 1.5z"/></svg>
+                                    </button>
+                                    <button type="button" class="deck-arrow deck-arrow-next" data-deck-next aria-label="Next slide">
+                                        <svg viewBox="0 0 24 40" aria-hidden="true"><path d="m5.5 4.5 12 15.5-12 15.5 4 3L23.8 20 9.5 1.5z"/></svg>
+                                    </button>
+                                </div>
+                                <div class="deck-controls">
+                                    <span class="deck-count" data-deck-count>1 / 7</span>
+                                </div>
+                            </div>
+                            <div class="site-modal-footer">Static PNG slides are used in the popup. Download the source deck: <a href="docs/projects/ormosa/overview.pptx">overview.pptx</a>.</div>
+                        </div>
+                    </div>
+
+                    <div id="ormosa-video-modal" class="site-modal" role="dialog" aria-modal="true" aria-labelledby="ormosa-video-title" aria-hidden="true">
+                        <div class="site-modal-backdrop" data-close-modal></div>
+                        <div class="site-modal-panel">
+                            <div class="site-modal-header">
+                                <h3 id="ormosa-video-title">Ormosa Demo</h3>
+                                <button type="button" class="site-modal-close" data-close-modal aria-label="Close Ormosa demo video">×</button>
+                            </div>
+                            <iframe class="site-modal-frame" title="Ormosa demo YouTube video" data-src="https://www.youtube.com/embed/L4Z80qT9x2A?autoplay=1&amp;rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <div class="video-file-fallback">
+                                <img src="https://img.youtube.com/vi/L4Z80qT9x2A/hqdefault.jpg" alt="Ormosa demo video thumbnail"/>
+                                <p>YouTube blocks embedded playback from local file pages. Open the video directly, or run the site from a local web server.</p>
+                                <a class="video-file-link" href="https://youtu.be/L4Z80qT9x2A" target="_blank" rel="noopener">Open on YouTube</a>
+                            </div>
+                            <div class="site-modal-footer">Video source: <a href="https://youtu.be/L4Z80qT9x2A" target="_blank" rel="noopener">YouTube</a>.</div>
+                        </div>
+                    </div>
 
                     <!-- Footer -->
                     <footer id="footer">
@@ -511,15 +2015,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" target="_blank" rel="noopener">
+                                <a href="https://linkedin.com/in/selinas901" target="_blank" rel="noopener">
                                     <svg><use xlink:href="#icon-linkedin"></use></svg>
                                     <span class="label">LinkedIn</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="mailto:ssun24@ucsc.edu">
-                                    <svg><use xlink:href="#icon-email"></use></svg>
-                                    <span class="label">Email</span>
                                 </a>
                             </li>
                         </ul>
@@ -569,6 +2067,464 @@
                     for (i = 0; i < ss.length; i++) f(ss[i]);
                     return a;
                   };
+                (function() {
+                    var storageKey = 'elsipika-theme'
+                      , buttons = $$('[data-theme-choice]')
+                      , media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null
+                      , getMode = function() {
+                        try { return localStorage.getItem(storageKey) || 'system'; }
+                        catch (e) { return 'system'; }
+                      }
+                      , resolveTheme = function(mode) {
+                        if (mode == 'system') return (media && media.matches) ? 'dark' : 'light';
+                        return mode;
+                      }
+                      , applyTheme = function(mode) {
+                        var theme = resolveTheme(mode), i;
+                        document.documentElement.dataset.themeMode = mode;
+                        document.documentElement.dataset.theme = theme;
+                        for (i = 0; i < buttons.length; i++) {
+                            if (buttons[i].dataset.themeChoice == mode) buttons[i].classList.add('is-active');
+                            else buttons[i].classList.remove('is-active');
+                            buttons[i].setAttribute('aria-pressed', buttons[i].dataset.themeChoice == mode ? 'true' : 'false');
+                        }
+                      }
+                      , mode = getMode()
+                      , i;
+                    applyTheme(mode);
+                    for (i = 0; i < buttons.length; i++) {
+                        buttons[i].addEventListener('click', function() {
+                            var next = this.dataset.themeChoice;
+                            try { localStorage.setItem(storageKey, next); } catch (e) {}
+                            applyTheme(next);
+                        });
+                    }
+                    if (media) {
+                        var onChange = function() {
+                            if (getMode() == 'system') applyTheme('system');
+                        };
+                        if (media.addEventListener) media.addEventListener('change', onChange);
+                        else if (media.addListener) media.addListener(onChange);
+                    }
+                }());
+                (function() {
+                    var openers = $$('[data-open-modal]')
+                      , closeTriggers = $$('[data-close-modal]')
+                      , modals = $$('.site-modal')
+                      , activeModal = null
+                      , lastFocus = null
+                      , isFilePage = function() {
+                        return location.protocol == 'file:';
+                      }
+                      , getDeckSrc = function(deck, index) {
+                        return deck.dataset.deckPrefix + String(index + 1).padStart(2, '0') + '.png';
+                      }
+                      , resetDeck = function(modal) {
+                        var deck, image, count, total;
+                        if (!modal) return;
+                        deck = modal.querySelector('[data-deck-slideshow]');
+                        if (!deck) return;
+                        total = parseInt(deck.dataset.deckCountTotal, 10) || 1;
+                        deck.dataset.index = '0';
+                        image = deck.querySelector('.deck-slide');
+                        count = deck.querySelector('[data-deck-count]');
+                        if (image) {
+                            image.src = getDeckSrc(deck, 0);
+                            image.alt = modal.querySelector('h3').textContent + ' slide 1';
+                        }
+                        if (count) count.textContent = '1 / ' + total;
+                      }
+                      , openModal = function(modal) {
+                        var frame;
+                        if (!modal) return;
+                        if (activeModal) closeModal(activeModal);
+                        lastFocus = document.activeElement;
+                        activeModal = modal;
+                        modal.classList.add('is-open');
+                        modal.setAttribute('aria-hidden', 'false');
+                        resetDeck(modal);
+                        frame = modal.querySelector('iframe[data-src]');
+                        if (frame && modal.id == 'ormosa-video-modal' && isFilePage()) {
+                            modal.classList.add('is-file-video');
+                            frame.removeAttribute('src');
+                        } else if (frame && !frame.src) {
+                            modal.classList.remove('is-file-video');
+                            frame.src = frame.dataset.src;
+                        }
+                        document.body.style.overflow = 'hidden';
+                        setTimeout(function() {
+                            var close = modal.querySelector('[data-close-modal]');
+                            if (close) close.focus();
+                        }, 0);
+                      }
+                      , closeModal = function(modal) {
+                        var frame, video;
+                        if (!modal) return;
+                        modal.classList.remove('is-open');
+                        modal.classList.remove('is-file-video');
+                        modal.setAttribute('aria-hidden', 'true');
+                        frame = modal.querySelector('iframe');
+                        if (frame) frame.removeAttribute('src');
+                        video = modal.querySelector('video');
+                        if (video) {
+                            video.pause();
+                            video.currentTime = 0;
+                        }
+                        if (activeModal == modal) activeModal = null;
+                        document.body.style.overflow = '';
+                        if (lastFocus && lastFocus.focus) lastFocus.focus();
+                      }
+                      , i;
+                    for (i = 0; i < modals.length; i++) document.body.appendChild(modals[i]);
+                    for (i = 0; i < openers.length; i++) {
+                        openers[i].addEventListener('click', function() {
+                            openModal($('#' + this.dataset.openModal));
+                        });
+                    }
+                    for (i = 0; i < closeTriggers.length; i++) {
+                        closeTriggers[i].addEventListener('click', function() {
+                            closeModal(this.closest('.site-modal'));
+                        });
+                    }
+                    on('keydown', function(event) {
+                        if (event.key == 'Escape' && activeModal) closeModal(activeModal);
+                    });
+                }());
+                (function() {
+                    var decks = $$('[data-deck-slideshow]')
+                      , i;
+                    for (i = 0; i < decks.length; i++) {
+                        (function(deck) {
+                            var total = parseInt(deck.dataset.deckCountTotal, 10) || 1
+                              , image = deck.querySelector('.deck-slide')
+                              , count = deck.querySelector('[data-deck-count]')
+                              , title = deck.closest('.site-modal').querySelector('h3').textContent
+                              , show = function(index) {
+                                var next = (index + total) % total;
+                                deck.dataset.index = String(next);
+                                image.src = deck.dataset.deckPrefix + String(next + 1).padStart(2, '0') + '.png';
+                                image.alt = title + ' slide ' + (next + 1);
+                                count.textContent = (next + 1) + ' / ' + total;
+                              };
+                            deck.dataset.index = '0';
+                            deck.querySelector('[data-deck-prev]').addEventListener('click', function() {
+                                show(parseInt(deck.dataset.index, 10) - 1);
+                            });
+                            deck.querySelector('[data-deck-next]').addEventListener('click', function() {
+                                show(parseInt(deck.dataset.index, 10) + 1);
+                            });
+                        }(decks[i]));
+                    }
+                }());
+                (function() {
+                    var track = $('#tunnel-track')
+                      , runner = $('#rabbit-runner')
+                      , gameCursor = $('#game-cursor')
+                      , scoreEl = $('#rabbit-score')
+                      , livesEl = $('#rabbit-lives')
+                      , timeEl = $('#rabbit-time')
+                      , messageEl = $('#rabbit-message')
+                      , logEl = $('#rabbit-log')
+                      , startEl = $('#rabbit-start')
+                      , stopEl = $('#rabbit-stop')
+                      , restartEl = $('#rabbit-restart');
+                    if (!track || !runner || !gameCursor || !scoreEl || !livesEl || !timeEl || !messageEl || !logEl || !startEl || !stopEl || !restartEl) return;
+
+                    var outcomes = [
+                        { id: 'carrot', label: 'Carrot', symbol: '🥕', points: 3, message: 'Carrot found. +3 points.' },
+                        { id: 'toy', label: 'Toy', symbol: '🧸', points: 6, message: 'A bunny toy. +6 points.' },
+                        { id: 'rabbit', label: 'Rabbit', symbol: '🐰', points: 2, lives: 1, message: 'A friend joins. +2 points and +1 life.' },
+                        { id: 'blueberries', label: 'Blueberries', symbol: '🫐', points: 5, message: 'Blueberries. +5 points.' },
+                        { id: 'poop', label: 'Poop', symbol: '💩', points: -3, message: 'Poop pile. -3 points.' },
+                        { id: 'snake', label: 'Snake', symbol: '🐍', points: -5, message: 'Snake bite. -5 points.' },
+                        { id: 'lizard', label: 'Lizard', symbol: '🦎', points: -2, message: 'Lizard scare. -2 points.' },
+                        { id: 'mine', label: 'Land mine', symbol: '💥', points: 0, lives: -1, message: 'Land mine. -1 life.' }
+                      ]
+                      , score = 0
+                      , lives = 1
+                      , clockBase = 0
+                      , clockStartedAt = null
+                      , timer = null
+                      , actionTimer = null
+                      , wanderTimer = null
+                      , round = []
+                      , locked = false
+                      , gameOver = false
+                      , running = false
+                      , startedOnce = false
+                      , highlightedIndex = -1;
+
+                    var randomInt = function(min, max) {
+                        return Math.floor(Math.random() * (max - min + 1)) + min;
+                    };
+                    var pickOutcome = function() {
+                        var roll = Math.random();
+                        if (roll < 0.18) return outcomes[0];
+                        if (roll < 0.31) return outcomes[1];
+                        if (roll < 0.39) return outcomes[2];
+                        if (roll < 0.53) return outcomes[3];
+                        if (roll < 0.70) return outcomes[4];
+                        if (roll < 0.82) return outcomes[5];
+                        if (roll < 0.93) return outcomes[6];
+                        return outcomes[7];
+                    };
+                    var formatTime = function(total) {
+                        var minutes = Math.floor(total / 60)
+                          , seconds = total % 60;
+                        return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+                    };
+                    var elapsedSeconds = function() {
+                        if (!running || !clockStartedAt) return clockBase;
+                        return clockBase + Math.floor((Date.now() - clockStartedAt) / 1000);
+                    };
+                    var elapsed = function() {
+                        return formatTime(elapsedSeconds());
+                    };
+                    var addEvent = function(text, icon) {
+                        var item = document.createElement('li')
+                          , time = document.createElement('time')
+                          , span = document.createElement('span');
+                        time.textContent = '[' + elapsed() + '] ';
+                        span.textContent = (icon ? icon + ' ' : '') + text;
+                        item.appendChild(time);
+                        item.appendChild(span);
+                        logEl.appendChild(item);
+                        while (logEl.children.length > 60) logEl.removeChild(logEl.firstElementChild);
+                        logEl.scrollTop = logEl.scrollHeight;
+                    };
+                    var updateStats = function() {
+                        scoreEl.textContent = score;
+                        livesEl.textContent = lives;
+                        timeEl.textContent = formatTime(elapsedSeconds());
+                    };
+                    var setControls = function() {
+                        startEl.disabled = running && !gameOver;
+                        stopEl.disabled = !running || gameOver;
+                    };
+                    var setChoicesDisabled = function(disabled) {
+                        Array.prototype.forEach.call(track.querySelectorAll('button'), function(button) {
+                            if (!button.classList.contains('is-revealed')) button.disabled = disabled;
+                        });
+                    };
+                    var highlightTunnel = function(index) {
+                        var buttons = track.querySelectorAll('button'), i;
+                        highlightedIndex = index;
+                        for (i = 0; i < buttons.length; i++) {
+                            if (i == index && !buttons[i].disabled) buttons[i].classList.add('is-hot');
+                            else buttons[i].classList.remove('is-hot');
+                        }
+                    };
+                    var clearHighlight = function() {
+                        highlightedIndex = -1;
+                        Array.prototype.forEach.call(track.querySelectorAll('button'), function(button) {
+                            button.classList.remove('is-hot');
+                        });
+                    };
+                    var wanderRabbit = function(logMove) {
+                        if (!running || locked || gameOver || !round.length) return;
+                        var index = randomInt(0, round.length - 1);
+                        setRunner(index);
+                        highlightTunnel(index);
+                        if (logMove) addEvent('Rabbit is sniffing around tunnel ' + (index + 1) + '.', '🐇');
+                    };
+                    var startTimers = function() {
+                        if (!timer) timer = setInterval(updateStats, 1000);
+                        if (!actionTimer) actionTimer = setInterval(function() {
+                            if (!gameOver && !locked && running) randomAction(true);
+                        }, 3500);
+                        if (!wanderTimer) wanderTimer = setInterval(function() {
+                            wanderRabbit(false);
+                        }, 3600);
+                    };
+                    var stopTimers = function() {
+                        if (timer) {
+                            clearInterval(timer);
+                            timer = null;
+                        }
+                        if (actionTimer) {
+                            clearInterval(actionTimer);
+                            actionTimer = null;
+                        }
+                        if (wanderTimer) {
+                            clearInterval(wanderTimer);
+                            wanderTimer = null;
+                        }
+                    };
+                    var setAction = function(action) {
+                        var classes = ['action-smell', 'action-jump', 'action-roll', 'action-think'], i;
+                        for (i = 0; i < classes.length; i++) runner.classList.remove(classes[i]);
+                        runner.classList.add('action-' + action);
+                        runner.dataset.actionLabel = action == 'smell' ? 'sniff sniff' : (action == 'think' ? 'thinking...' : action);
+                        if (action == 'jump') runner.style.setProperty('--rabbit-top', (randomInt(5, 13) / 10) + 'rem');
+                    };
+                    var randomAction = function(logAction) {
+                        var actions = ['smell', 'jump', 'roll', 'think']
+                          , action = actions[randomInt(0, actions.length - 1)];
+                        setAction(action);
+                        if (logAction) addEvent('Rabbit action: ' + action + '.');
+                    };
+                    var setRunner = function(index) {
+                        var count = Math.max(round.length, 1)
+                          , percent = count == 1 ? 0 : (index / (count - 1)) * 100
+                          , left;
+                        if (index === 0) left = '0.75rem';
+                        else if (index === count - 1) left = 'calc(100% - 2.9rem)';
+                        else left = 'calc(' + percent + '% - 1.075rem)';
+                        runner.style.setProperty('--rabbit-left', left);
+                        gameCursor.style.setProperty('--cursor-left', index === count - 1 ? 'calc(100% - 2rem)' : (index === 0 ? '1.5rem' : 'calc(' + percent + '% - 0.1rem)'));
+                        gameCursor.style.setProperty('--cursor-top', '3rem');
+                    };
+                    var renderRound = function(isPreview) {
+                        var i, choice, button, symbol, label, count = randomInt(2, 5);
+                        round = [];
+                        locked = false;
+                        track.innerHTML = '';
+                        track.style.setProperty('--choice-count', count);
+                        for (i = 0; i < count; i++) {
+                            choice = pickOutcome();
+                            round.push(choice);
+                            button = document.createElement('button');
+                            button.type = 'button';
+                            button.className = 'tunnel-choice';
+                            button.dataset.index = i;
+                            button.setAttribute('aria-label', 'Choose tunnel ' + (i + 1));
+                            symbol = document.createElement('span');
+                            symbol.className = 'choice-symbol';
+                            symbol.textContent = '?';
+                            button.appendChild(symbol);
+                            button.insertAdjacentHTML('beforeend', '<img class="tunnel-image" src="images/tunnel.svg" alt="" aria-hidden="true"/>');
+                            label = document.createElement('span');
+                            label.textContent = 'Tunnel ' + (i + 1);
+                            button.appendChild(label);
+                            button.disabled = !running;
+                            button.addEventListener('click', chooseTunnel);
+                            track.appendChild(button);
+                        }
+                        setRunner(0);
+                        randomAction(false);
+                        highlightTunnel(0);
+                        if (isPreview) {
+                            messageEl.textContent = 'Press Start to open the first set of tunnels.';
+                            return;
+                        }
+                        messageEl.textContent = 'The rabbit found ' + count + ' tunnels. Choose one.';
+                        addEvent('Round opened with ' + count + ' tunnels.', '🕳️');
+                        setTimeout(function() { wanderRabbit(false); }, 250);
+                    };
+                    var finishGame = function(text) {
+                        gameOver = true;
+                        locked = true;
+                        clockBase = elapsedSeconds();
+                        clockStartedAt = null;
+                        running = false;
+                        stopTimers();
+                        messageEl.textContent = text + ' Final score: ' + score + '.';
+                        addEvent(text + ' Game over with score ' + score + '.', '💥');
+                        Array.prototype.forEach.call(track.querySelectorAll('button'), function(button) {
+                            button.disabled = true;
+                        });
+                        updateStats();
+                        setControls();
+                    };
+                    var chooseTunnel = function(event) {
+                        var button = event.currentTarget
+                          , index = parseInt(button.dataset.index, 10)
+                          , outcome = round[index]
+                          , buttons = track.querySelectorAll('button');
+                        if (!running || locked || gameOver || !outcome) return;
+                        if (index !== highlightedIndex) {
+                            messageEl.textContent = 'Wait for the bunny to hop over that tunnel first.';
+                            addEvent('Selection blocked. Bunny is not on tunnel ' + (index + 1) + '.', '🐇');
+                            return;
+                        }
+                        locked = true;
+                        setRunner(index);
+                        clearHighlight();
+                        randomAction(true);
+                        Array.prototype.forEach.call(buttons, function(item) {
+                            item.disabled = true;
+                        });
+                        button.classList.add('is-selected', 'is-revealed');
+                        button.querySelector('.choice-symbol').textContent = outcome.symbol;
+                        button.lastElementChild.textContent = outcome.label;
+                        score += outcome.points || 0;
+                        lives += outcome.lives || 0;
+                        addEvent('Tunnel ' + (index + 1) + ' revealed ' + outcome.label + '. ' + outcome.message, outcome.symbol);
+                        if (lives < 1) {
+                            updateStats();
+                            finishGame(outcome.message + ' No lives left.');
+                            return;
+                        }
+                        updateStats();
+                        messageEl.textContent = outcome.message + ' Next tunnels opening...';
+                        setTimeout(function() {
+                            if (!gameOver && running) renderRound();
+                        }, 3000);
+                    };
+                    var startGame = function() {
+                        if (running) return;
+                        if (!startedOnce || gameOver) {
+                            score = 0;
+                            lives = 1;
+                            clockBase = 0;
+                            logEl.innerHTML = '';
+                            gameOver = false;
+                            locked = false;
+                            startedOnce = true;
+                            running = true;
+                            clockStartedAt = Date.now();
+                            updateStats();
+                            addEvent('Rabbit Tunnel started.', '🐇');
+                            renderRound();
+                        } else {
+                            running = true;
+                            locked = false;
+                            clockStartedAt = Date.now();
+                            if (track.querySelector('.is-revealed')) renderRound();
+                            else setChoicesDisabled(false);
+                            messageEl.textContent = 'Rabbit Tunnel resumed. Choose a tunnel.';
+                            addEvent('Rabbit Tunnel resumed.', '🐇');
+                        }
+                        startTimers();
+                        setControls();
+                        updateStats();
+                    };
+                    var stopGame = function() {
+                        if (!running) return;
+                        clockBase = elapsedSeconds();
+                        clockStartedAt = null;
+                        running = false;
+                        locked = true;
+                        stopTimers();
+                        setChoicesDisabled(true);
+                        clearHighlight();
+                        messageEl.textContent = 'Rabbit Tunnel stopped. Press Start to continue.';
+                        addEvent('Rabbit Tunnel stopped.', '⏸️');
+                        updateStats();
+                        setControls();
+                    };
+                    var resetIdle = function() {
+                        stopTimers();
+                        score = 0;
+                        lives = 1;
+                        clockBase = 0;
+                        clockStartedAt = null;
+                        gameOver = false;
+                        locked = false;
+                        running = false;
+                        startedOnce = false;
+                        logEl.innerHTML = '';
+                        renderRound(true);
+                        setAction('think');
+                        updateStats();
+                        setControls();
+                    };
+
+                    startEl.addEventListener('click', startGame);
+                    stopEl.addEventListener('click', stopGame);
+                    restartEl.addEventListener('click', resetIdle);
+                    resetIdle();
+                }());
                 on('load', function() {
                     setTimeout(function() {
                         $body.className = $body.className.replace(/\bis-loading\b/, 'is-playing');
@@ -578,6 +2534,21 @@
                 (function() {
                     var initialSection, initialScrollPoint, initialId, header, footer, name, hideHeader, hideFooter, h, e, ee, k
                       , locked = false
+                      , setActiveNav = function(name) {
+                        var links = $$('#buttons01 .button'), i, link, id;
+                        if (!name) name = 'home';
+                        for (i = 0; i < links.length; i++) {
+                            link = links[i];
+                            id = link.dataset.navId || (link.hash ? link.hash.substring(1) : null);
+                            if (id == name) {
+                                link.classList.add('is-active');
+                                link.setAttribute('aria-current', name == 'resume' ? 'true' : 'page');
+                            } else {
+                                link.classList.remove('is-active');
+                                link.removeAttribute('aria-current');
+                            }
+                        }
+                      }
                       , doNext = function() {
                         var section = $('#main > .inner > section.active').nextElementSibling;
                         if (!section || section.tagName != 'SECTION') return;
@@ -632,6 +2603,7 @@
                     ee = $$('#main > .inner > section:not([id="' + initialId + '"])');
                     for (k = 0; k < ee.length; k++) { ee[k].className = 'inactive'; ee[k].style.display = 'none'; }
                     initialSection.classList.add('active');
+                    setActiveNav(name);
                     doScroll(null, 'instant');
                     on('load', function() { if (initialScrollPoint) doScroll(initialScrollPoint, 'instant'); });
                     on('hashchange', function(event) {
@@ -645,12 +2617,14 @@
                         } else return false;
                         if (!section) return false;
                         if (!section.classList.contains('inactive')) {
+                            setActiveNav(scrollPoint ? h : section.id.replace(/-section$/, ''));
                             if (scrollPoint) doScroll(scrollPoint); else doScroll(null);
                             return false;
                         } else {
                             locked = true;
                             if (location.hash == '#home') history.replaceState(null, null, '#');
                             name = (section ? section.id.replace(/-section$/, '') : null);
+                            setActiveNav(name);
                             hideHeader = name ? ((name in sections) && ('hideHeader' in sections[name]) && sections[name].hideHeader) : false;
                             hideFooter = name ? ((name in sections) && ('hideFooter' in sections[name]) && sections[name].hideFooter) : false;
                             if (header && hideHeader) { header.classList.add('hidden'); setTimeout(function() { header.style.display = 'none'; }, 250); }
@@ -690,6 +2664,7 @@
                     on('click', function(event) {
                         var t = event.target;
                         if (t.tagName == 'IMG' && t.parentElement && t.parentElement.tagName == 'A') t = t.parentElement;
+                        if (t.tagName == 'A' && t.dataset.navId == 'resume') setActiveNav('resume');
                         if (t.tagName == 'A' && t.getAttribute('href').substr(0, 1) == '#' && t.hash == window.location.hash) {
                             event.preventDefault();
                             history.replaceState(undefined, undefined, '#');

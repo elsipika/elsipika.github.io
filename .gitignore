@@ -9,7 +9,8 @@
 *.log
 
 # Local project workspaces
-projects/
+/projects/
+/docs/projects/ormosa/ormosa_overview.pptx
 
 REFERENCE.md
 

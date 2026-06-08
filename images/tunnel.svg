@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" role="img" aria-label="Tunnel">
+  <defs>
+    <linearGradient id="wall" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f7edf9"/>
+      <stop offset="1" stop-color="#d4b0e5"/>
+    </linearGradient>
+    <linearGradient id="hole" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#4b355a"/>
+      <stop offset="1" stop-color="#17121f"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="180" rx="18" fill="url(#wall)"/>
+  <path d="M60 18 C25 40 95 63 60 88 C25 112 95 132 60 162" fill="none" stroke="#6f3696" stroke-width="30" stroke-linecap="round" opacity="0.45"/>
+  <path d="M60 22 C34 42 86 64 60 88 C34 112 86 132 60 158" fill="none" stroke="url(#hole)" stroke-width="18" stroke-linecap="round"/>
+  <ellipse cx="60" cy="18" rx="28" ry="13" fill="#17121f"/>
+  <ellipse cx="60" cy="18" rx="20" ry="8" fill="#4b355a"/>
+</svg>
