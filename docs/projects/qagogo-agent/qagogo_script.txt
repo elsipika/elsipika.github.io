@@ -1,0 +1,34 @@
+QAgogo Agent Demo Script
+
+Slide 1 - Overview
+QAgogo is a QA automation agent for web and mobile apps.
+It suggests coverage, runs Playwright and Detox flows, captures evidence, and exports an HTML QA report with bugs and recommendations.
+
+Slide 2 - Selina Capability
+This project shows my ability to build and verify both web and mobile product surfaces.
+The stack connects React, React Native, Playwright, and Detox into one working QA portfolio project.
+
+Slide 3 - Web App And Playwright Demo
+This is the BunnyBoard React dashboard tested with Playwright.
+The headed web run checks login, filters, task actions, validation, sync errors, and responsive behavior with 14 passing tests.
+
+Slide 4 - Mobile App And Detox Demo
+This is BunnyBoard Mobile, a React Native app tested with Detox on the iOS simulator.
+The mobile run checks login, dashboard state, add task, complete task, sync error, and empty-title validation with 6 passing tests.
+
+Slide 5 - QA Findings And Report Output
+The tests expose product risks, including empty-password login, count mismatch, missing due-time validation, and a vague sync error.
+QAgogo turns those results into report-ready bugs with steps, evidence, and suggested fixes.
+
+Slide 6 - Why Hire Selina
+This project shows I can build, debug, deliver, and demo an end-to-end product suite.
+It also shows communication skill, because test results become clear risks, fixes, and evidence.
+
+Mobile Test Script
+I run `npm run test:mobile:e2e:ios` to show Detox driving the native BunnyBoard Mobile iOS app.
+This run covers six mobile workflows and completes with 6 passing tests.
+
+Web Test Script
+I run `npm run test:web:e2e -- --headed` to show Playwright driving the BunnyBoard React app in a visible browser.
+This run covers core web workflows and completes with 14 passing tests.
+
