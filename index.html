@@ -1735,19 +1735,12 @@
                                         <img src="docs/projects/qagogo-agent/slides/slide-01.png" alt="QAgogo overview slide deck preview"/>
                                         <span class="project-media-caption">Open overview slides <span>→</span></span>
                                     </button>
-                                    <button type="button" class="project-video-button" data-open-modal="qagogo-web-video-modal">
+                                    <button type="button" class="project-video-button" data-open-modal="qagogo-video-modal">
                                         <span class="project-video-thumb">
-                                            <img src="docs/projects/qagogo-agent/videos/qagogo-demo-web-poster.png" alt="QAgogo demo web video thumbnail"/>
+                                            <img src="https://img.youtube.com/vi/Ll1lJP7wAvk/hqdefault.jpg" alt="QAgogo demo video thumbnail"/>
                                             <span class="project-video-play" aria-hidden="true">▶</span>
                                         </span>
-                                        <span class="project-video-caption">Watch demo-web video <span>→</span></span>
-                                    </button>
-                                    <button type="button" class="project-video-button" data-open-modal="qagogo-mobile-video-modal">
-                                        <span class="project-video-thumb">
-                                            <img src="docs/projects/qagogo-agent/videos/qagogo-demo-mobile-poster.png" alt="QAgogo demo mobile video thumbnail"/>
-                                            <span class="project-video-play" aria-hidden="true">▶</span>
-                                        </span>
-                                        <span class="project-video-caption">Watch demo-mobile video <span>→</span></span>
+                                        <span class="project-video-caption">Watch QAgogo demo video <span>→</span></span>
                                     </button>
                                     <div class="tech-tags">
                                         <span class="tech-tag">Playwright</span>
@@ -1775,7 +1768,7 @@
                                     </button>
                                     <button type="button" class="project-video-button" data-open-modal="ormosa-video-modal">
                                         <span class="project-video-thumb">
-                                            <img src="https://img.youtube.com/vi/ZaKP9je83jk/hqdefault.jpg" alt="Ormosa demo video thumbnail"/>
+                                            <img src="https://img.youtube.com/vi/_qjkRDi2k8A/hqdefault.jpg" alt="Ormosa demo video thumbnail"/>
                                             <span class="project-video-play" aria-hidden="true">▶</span>
                                         </span>
                                         <span class="project-video-caption">Watch Ormosa demo video <span>→</span></span>
@@ -1941,31 +1934,20 @@
                         </div>
                     </div>
 
-                    <div id="qagogo-web-video-modal" class="site-modal" role="dialog" aria-modal="true" aria-labelledby="qagogo-web-video-title" aria-hidden="true">
+                    <div id="qagogo-video-modal" class="site-modal" role="dialog" aria-modal="true" aria-labelledby="qagogo-video-title" aria-hidden="true">
                         <div class="site-modal-backdrop" data-close-modal></div>
                         <div class="site-modal-panel">
                             <div class="site-modal-header">
-                                <h3 id="qagogo-web-video-title">QAgogo Demo Web</h3>
-                                <button type="button" class="site-modal-close" data-close-modal aria-label="Close QAgogo demo web video">×</button>
+                                <h3 id="qagogo-video-title">QAgogo Demo</h3>
+                                <button type="button" class="site-modal-close" data-close-modal aria-label="Close QAgogo demo video">×</button>
                             </div>
-                            <video class="site-modal-video" controls preload="metadata" poster="docs/projects/qagogo-agent/videos/qagogo-demo-web-poster.png">
-                                <source src="docs/projects/qagogo-agent/videos/qagogo-demo-web.mp4" type="video/mp4"/>
-                            </video>
-                            <div class="site-modal-footer">Local MP4 demo for BunnyBoard demo-web and QAgogo web findings.</div>
-                        </div>
-                    </div>
-
-                    <div id="qagogo-mobile-video-modal" class="site-modal" role="dialog" aria-modal="true" aria-labelledby="qagogo-mobile-video-title" aria-hidden="true">
-                        <div class="site-modal-backdrop" data-close-modal></div>
-                        <div class="site-modal-panel">
-                            <div class="site-modal-header">
-                                <h3 id="qagogo-mobile-video-title">QAgogo Demo Mobile</h3>
-                                <button type="button" class="site-modal-close" data-close-modal aria-label="Close QAgogo demo mobile video">×</button>
+                            <iframe class="site-modal-frame" title="QAgogo demo YouTube video" data-src="https://www.youtube.com/embed/Ll1lJP7wAvk?autoplay=1&amp;rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <div class="video-file-fallback">
+                                <img src="https://img.youtube.com/vi/Ll1lJP7wAvk/hqdefault.jpg" alt="QAgogo demo video thumbnail"/>
+                                <p>YouTube blocks embedded playback from local file pages. Open the video directly, or run the site from a local web server.</p>
+                                <a class="video-file-link" href="https://youtu.be/Ll1lJP7wAvk" target="_blank" rel="noopener">Open on YouTube</a>
                             </div>
-                            <video class="site-modal-video" controls preload="metadata" poster="docs/projects/qagogo-agent/videos/qagogo-demo-mobile-poster.png">
-                                <source src="docs/projects/qagogo-agent/videos/qagogo-demo-mobile.mp4" type="video/mp4"/>
-                            </video>
-                            <div class="site-modal-footer">Local MP4 storyboard for BunnyBoard Mobile and Detox coverage.</div>
+                            <div class="site-modal-footer">Video source: <a href="https://youtu.be/Ll1lJP7wAvk" target="_blank" rel="noopener">YouTube</a>.</div>
                         </div>
                     </div>
 
@@ -2001,13 +1983,13 @@
                                 <h3 id="ormosa-video-title">Ormosa Demo</h3>
                                 <button type="button" class="site-modal-close" data-close-modal aria-label="Close Ormosa demo video">×</button>
                             </div>
-                            <iframe class="site-modal-frame" title="Ormosa demo YouTube video" data-src="https://www.youtube.com/embed/ZaKP9je83jk?autoplay=1&amp;rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <iframe class="site-modal-frame" title="Ormosa demo YouTube video" data-src="https://www.youtube.com/embed/_qjkRDi2k8A?autoplay=1&amp;rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                             <div class="video-file-fallback">
-                                <img src="https://img.youtube.com/vi/ZaKP9je83jk/hqdefault.jpg" alt="Ormosa demo video thumbnail"/>
+                                <img src="https://img.youtube.com/vi/_qjkRDi2k8A/hqdefault.jpg" alt="Ormosa demo video thumbnail"/>
                                 <p>YouTube blocks embedded playback from local file pages. Open the video directly, or run the site from a local web server.</p>
-                                <a class="video-file-link" href="https://youtu.be/ZaKP9je83jk" target="_blank" rel="noopener">Open on YouTube</a>
+                                <a class="video-file-link" href="https://youtu.be/_qjkRDi2k8A" target="_blank" rel="noopener">Open on YouTube</a>
                             </div>
-                            <div class="site-modal-footer">Video source: <a href="https://youtu.be/ZaKP9je83jk" target="_blank" rel="noopener">YouTube</a>.</div>
+                            <div class="site-modal-footer">Video source: <a href="https://youtu.be/_qjkRDi2k8A" target="_blank" rel="noopener">YouTube</a>.</div>
                         </div>
                     </div>
 
@@ -2152,7 +2134,7 @@
                         modal.setAttribute('aria-hidden', 'false');
                         resetDeck(modal);
                         frame = modal.querySelector('iframe[data-src]');
-                        if (frame && modal.id == 'ormosa-video-modal' && isFilePage()) {
+                        if (frame && isFilePage()) {
                             modal.classList.add('is-file-video');
                             frame.removeAttribute('src');
                         } else if (frame && !frame.src) {
