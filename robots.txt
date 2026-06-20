@@ -1,0 +1,13 @@
+User-agent: Googlebot
+Disallow: /images/cupsiecmykgreen.jpg
+Disallow: /images/aquarium2.png
+Disallow: /images/dsgirlcozy.png
+Disallow: /images/umbrellagirlfinal.png
+Disallow: /images/umbrellagirlfinal_logo.png
+
+User-agent: Googlebot-Image
+Disallow: /images/cupsiecmykgreen.jpg
+Disallow: /images/aquarium2.png
+Disallow: /images/dsgirlcozy.png
+Disallow: /images/umbrellagirlfinal.png
+Disallow: /images/umbrellagirlfinal_logo.png
