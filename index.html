@@ -714,16 +714,61 @@
             .falling-item {
                 position: absolute;
                 top: 0;
-                left: calc(var(--lane, 0) * 25% + 12.5%);
+                left: var(--x, 50%);
                 width: 1.75rem;
                 height: 1.75rem;
                 display: grid;
                 place-items: center;
-                margin: -0.875rem 0 0 -0.875rem;
+                transform: translate(-50%, -50%) scale(var(--item-scale, 1));
                 font-size: 1.15rem;
                 line-height: 1;
                 pointer-events: none;
                 z-index: 2;
+            }
+            .road-3d {
+                position: absolute;
+                inset: 0;
+                display: none;
+                pointer-events: none;
+            }
+            .road-3d span {
+                position: absolute;
+                inset: 0;
+                display: block;
+            }
+            .road-surface {
+                background:
+                    linear-gradient(180deg, var(--accent-soft) 0 18%, transparent 62%),
+                    var(--surface-muted);
+                clip-path: polygon(37% 18%, 63% 18%, 107.6% 100%, -7.6% 100%);
+            }
+            .road-line {
+                background: var(--border);
+                opacity: 0.85;
+            }
+            .road-line.l1 {
+                clip-path: polygon(43.32% 18%, 43.68% 18%, 21.54% 100%, 20.84% 100%);
+            }
+            .road-line.l2 {
+                clip-path: polygon(49.82% 18%, 50.18% 18%, 50.35% 100%, 49.65% 100%);
+            }
+            .road-line.l3 {
+                clip-path: polygon(56.32% 18%, 56.68% 18%, 79.16% 100%, 78.46% 100%);
+            }
+            .road-3d .road-horizon {
+                inset: 18% 0 auto 0;
+                height: 0;
+                border-top: 1px dashed var(--accent);
+                opacity: 0.45;
+            }
+            .bunny-field.is-3d .lane-guides {
+                display: none;
+            }
+            .bunny-field.is-3d .road-3d {
+                display: block;
+            }
+            .bunny-field.is-3d .field-sky {
+                background: linear-gradient(180deg, var(--accent-soft) 0 18%, transparent 18%);
             }
             .bunny-runner {
                 position: absolute;
@@ -732,7 +777,8 @@
                 width: 2.7rem;
                 height: 2.7rem;
                 margin-left: -1.35rem;
-                transition: left 0.13s ease-out, transform 0.16s ease-out;
+                transform: translateY(var(--jump-y, 0rem)) rotate(var(--lean, 0deg));
+                transition: left 0.13s ease-out, transform 0.15s ease-out;
                 z-index: 3;
             }
             .bunny-runner:before {
@@ -762,10 +808,57 @@
                 animation: bunny-hop 1.5s ease-in-out infinite;
             }
             .bunny-runner.lean-left {
-                transform: rotate(-10deg);
+                --lean: -10deg;
             }
             .bunny-runner.lean-right {
-                transform: rotate(10deg);
+                --lean: 10deg;
+            }
+            .bunny-runner.is-jumping {
+                --jump-y: -2rem;
+            }
+            .bunny-runner.is-jumping img {
+                box-shadow: 0 0.5rem 0.42rem rgba(76,38,104,0.22);
+                animation: bunny-leap 0.62s ease-out;
+            }
+            @keyframes bunny-leap {
+                0% { transform: scale(1.12, 0.88); }
+                25% { transform: scale(0.9, 1.14); }
+                60% { transform: scale(1.02, 0.98); }
+                100% { transform: scale(1, 1); }
+            }
+            .jump-button {
+                flex: 0 0 auto;
+                min-height: 1.85rem;
+                margin-top: 0.3rem;
+                border: 1px solid var(--accent);
+                border-radius: 0.3rem;
+                background: var(--accent-soft);
+                color: var(--accent-strong);
+                cursor: pointer;
+                font-family: var(--mono);
+                font-size: 0.46em;
+                font-weight: 700;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+            }
+            .jump-button:hover:not(:disabled) {
+                background: var(--accent-strong);
+                color: var(--surface-strong);
+            }
+            .jump-button:focus-visible {
+                outline: 2px solid var(--accent);
+                outline-offset: 2px;
+            }
+            .jump-button:disabled {
+                cursor: default;
+                opacity: 0.5;
+                border-color: var(--border);
+                background: var(--surface-muted);
+                color: var(--muted);
+            }
+            .bunny-field.is-quiz .jump-button,
+            .bunny-field.is-intro .jump-button {
+                display: none;
             }
             .bunny-runner:after {
                 content: attr(data-pop);
@@ -1105,7 +1198,7 @@
                 }
                 .bunny-runner.lean-left,
                 .bunny-runner.lean-right {
-                    transform: none;
+                    --lean: 0deg;
                 }
             }
             .hero-layout {
@@ -2133,9 +2226,9 @@
                         <div class="game-section" role="region" aria-label="Feed the bunny mini game">
                             <div class="header-game">
                                 <div class="game-panel">
-                                    <p class="game-title">Feed the Bunny <span>catch &amp; dodge</span></p>
-                                    <p class="game-welcome">Welcome to try my mini game!</p>
-                                    <p class="game-instructions">Press "Start" to play.<br/>Move with &#8592; &#8594; or tap a lane.</p>
+                                    <p class="game-title">Feed the Bunny <span>catch, dodge &amp; puzzle</span></p>
+                                    <p class="game-welcome">Try my 3-D game!</p>
+                                    <p class="game-instructions">Press "Start" to play.<br/>Move with &#8592; &#8594; or 1-4, jump with space.</p>
                                     <div class="game-stats" aria-label="Game status">
                                         <div class="game-stat"><strong id="bunny-score">0</strong><span>Score</span></div>
                                         <div class="game-stat"><strong id="bunny-lives">3</strong><span>Lives</span></div>
@@ -2148,6 +2241,7 @@
                                         <button type="button" id="bunny-stop" class="game-reset">Stop</button>
                                         <button type="button" id="bunny-restart" class="game-reset">Restart</button>
                                         <button type="button" id="bunny-how" class="game-reset">How to play</button>
+                                        <button type="button" id="bunny-3d" class="sound-toggle" aria-pressed="false">3D view</button>
                                         <button type="button" id="bunny-sound" class="sound-toggle" aria-pressed="true">&#128266; Sound</button>
                                     </div>
                                     <div class="game-log-panel">
@@ -2157,6 +2251,13 @@
                                 </div>
                                 <div id="bunny-field" class="bunny-field is-intro">
                                     <div id="field-sky" class="field-sky">
+                                        <div class="road-3d" aria-hidden="true">
+                                            <span class="road-surface"></span>
+                                            <span class="road-line l1"></span>
+                                            <span class="road-line l2"></span>
+                                            <span class="road-line l3"></span>
+                                            <span class="road-horizon"></span>
+                                        </div>
                                         <div class="lane-guides" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
                                         <div class="catch-line" aria-hidden="true"></div>
                                         <div id="bunny-runner" class="bunny-runner" data-pop="" aria-hidden="true">
@@ -2169,6 +2270,7 @@
                                         <button type="button" class="lane-button" data-lane="2">Lane 3</button>
                                         <button type="button" class="lane-button" data-lane="3">Lane 4</button>
                                     </div>
+                                    <button type="button" id="bunny-jump" class="jump-button">Jump &#8593;</button>
                                     <div id="quiz-overlay" class="quiz-overlay" role="dialog" aria-modal="true" aria-labelledby="quiz-question" hidden>
                                         <p class="quiz-tag" id="quiz-tag">Brain break</p>
                                         <p class="quiz-question" id="quiz-question"></p>
@@ -2202,11 +2304,12 @@
                                             </div>
                                         </div>
                                         <div class="intro-rules">
-                                            <p><b>Move</b><span><kbd class="intro-key">&#8592;</kbd> <kbd class="intro-key">&#8594;</kbd> or <kbd class="intro-key">A</kbd> <kbd class="intro-key">D</kbd>, tap a lane button, or tap the field.</span></p>
+                                            <p><b>Move</b><span><kbd class="intro-key">&#8592;</kbd> <kbd class="intro-key">&#8594;</kbd>, <kbd class="intro-key">A</kbd> <kbd class="intro-key">D</kbd>, or jump straight to a lane with <kbd class="intro-key">1</kbd> <kbd class="intro-key">2</kbd> <kbd class="intro-key">3</kbd> <kbd class="intro-key">4</kbd>. You can also tap a lane button or the field.</span></p>
+                                            <p><b>Jump</b><span><kbd class="intro-key">space</kbd> <kbd class="intro-key">&#8593;</kbd> or the Jump button. You hop over whatever is in your lane &mdash; good for dodging a hazard you cannot outrun, but you sail over treats too.</span></p>
                                             <p><b>Combo</b><span>Each treat in a row raises the multiplier up to <b class="intro-num">&#215;5</b>, and treat points are multiplied by it. A hazard or a missed treat drops you back to &#215;1.</span></p>
                                             <p><b>Dodging</b><span>Letting a hazard fall past you is worth <b class="intro-num">+1</b>.</span></p>
                                             <p><b>Lives</b><span>You start with <b class="intro-num">3</b> and can hold <b class="intro-num">5</b>. Only land mines and bunny friends change them. At zero the run ends.</span></p>
-                                            <p><b>Brain break</b><span>Every <b class="intro-num">12</b> items the field pauses for one QA, IQ or frontend question. Right answer: <b class="intro-num">+10</b> points and <b class="intro-num">+1</b> life. Wrong costs nothing. Either way the field speeds up after.</span></p>
+                                            <p><b>Brain break</b><span>Every <b class="intro-num">12</b> items the field pauses for one QA, puzzle or frontend question. Right answer: <b class="intro-num">+10</b> points and <b class="intro-num">+1</b> life. Wrong costs nothing. Either way the field speeds up after.</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -2625,19 +2728,25 @@
                       , soundEl = $('#bunny-sound')
                       , howEl = $('#bunny-how')
                       , introEl = $('#intro-panel')
+                      , modeEl = $('#bunny-3d')
+                      , jumpEl = $('#bunny-jump')
                       , overlay = $('#quiz-overlay')
                       , qTag = $('#quiz-tag')
                       , qQuestion = $('#quiz-question')
                       , qOptions = $('#quiz-options')
                       , qFeedback = $('#quiz-feedback')
                       , qContinue = $('#quiz-continue');
-                    if (!field || !sky || !bunny || !laneWrap || !scoreEl || !livesEl || !comboEl || !quizStatEl || !messageEl || !logEl || !startEl || !stopEl || !restartEl || !soundEl || !howEl || !introEl || !overlay || !qTag || !qQuestion || !qOptions || !qFeedback || !qContinue) return;
+                    if (!field || !sky || !bunny || !laneWrap || !scoreEl || !livesEl || !comboEl || !quizStatEl || !messageEl || !logEl || !startEl || !stopEl || !restartEl || !soundEl || !howEl || !introEl || !modeEl || !jumpEl || !overlay || !qTag || !qQuestion || !qOptions || !qFeedback || !qContinue) return;
 
                     var LANES = 4
                       , CATCH_LINE = 86
                       , QUIZ_EVERY = 12
+                      , HORIZON = 18
+                      , ROAD_HALF = 13
+                      , DEPTH_CURVE = 1.7
                       , MAX_COMBO = 5
-                      , MAX_LIVES = 5;
+                      , MAX_LIVES = 5
+                      , JUMP_MS = 620;
 
                     var TREATS = [
                         { id: 'carrot', symbol: '🥕', label: 'Carrot', points: 3, good: true, weight: 20 },
@@ -2734,7 +2843,7 @@
                             ]
                         },
                         {
-                            tag: 'Brain break \u00b7 IQ',
+                            tag: 'Brain break \u00b7 Puzzle',
                             questions: [
                                 {
                                     q: 'What comes next? 2, 4, 8, 16, ...',
@@ -3003,6 +3112,7 @@
                                 musicBus.gain.setValueAtTime(down ? 0.12 : 0.5, ctx.currentTime);
                             },
                             move: function() { tone(320, 0.05, 'square', 0, 0.08); },
+                            jump: function() { sweep(240, 700, 0.15, 'square', 0.16); },
                             treat: function(combo) { run([520 + combo * 40, 700 + combo * 50], 0.07, 'square', 0.24); },
                             hazard: function() { sweep(300, 90, 0.22, 'sawtooth', 0.2); },
                             lifeLost: function() { sweep(190, 55, 0.5, 'triangle', 0.32); },
@@ -3034,6 +3144,11 @@
                       , spawnAcc = 0
                       , popTimer = null
                       , leanTimer = null
+                      , airborne = false
+                      , jumpTimer = null
+                      , is3d = (function() {
+                            try { return localStorage.getItem('bunny-3d') !== 'off'; } catch (e) { return true; }
+                        }())
                       , clockBase = 0
                       , clockStartedAt = null;
 
@@ -3084,6 +3199,7 @@
                     var setControls = function() {
                         startEl.disabled = (running && !gameOver) || quizOpen;
                         stopEl.disabled = !running || gameOver || quizOpen;
+                        jumpEl.disabled = !running || quizOpen || gameOver || airborne;
                         howEl.disabled = quizOpen;
                         howEl.textContent = field.classList.contains('is-intro') ? 'Hide rules' : 'How to play';
                         Array.prototype.forEach.call(laneWrap.querySelectorAll('button'), function(button) {
@@ -3108,6 +3224,24 @@
                         });
                         if (withSound) audio.move();
                     };
+                    var land = function() {
+                        airborne = false;
+                        bunny.classList.remove('is-jumping');
+                        if (jumpTimer) {
+                            clearTimeout(jumpTimer);
+                            jumpTimer = null;
+                        }
+                        jumpEl.disabled = !running || quizOpen;
+                    };
+                    var jump = function() {
+                        if (!running || quizOpen || gameOver || airborne) return;
+                        airborne = true;
+                        bunny.classList.add('is-jumping');
+                        jumpEl.disabled = true;
+                        audio.jump();
+                        if (jumpTimer) clearTimeout(jumpTimer);
+                        jumpTimer = setTimeout(land, JUMP_MS);
+                    };
                     var popLabel = function(text, kind) {
                         bunny.dataset.pop = text;
                         bunny.classList.add('is-popping');
@@ -3118,6 +3252,29 @@
                             bunny.classList.remove('is-popping', 'is-treat', 'is-hit');
                             bunny.dataset.pop = '';
                         }, 750);
+                    };
+                    var positionItem = function(entry) {
+                        var t = Math.max(0, Math.min(entry.y / CATCH_LINE, 1))
+                          , laneCenter = entry.lane * (100 / LANES) + (50 / LANES)
+                          , x, y, scale, p;
+                        if (is3d) {
+                            p = Math.pow(t, DEPTH_CURVE);
+                            x = (50 - ROAD_HALF) + (ROAD_HALF * 2 / LANES) * (entry.lane + 0.5);
+                            x += (laneCenter - x) * p;
+                            y = HORIZON + (CATCH_LINE - HORIZON) * p;
+                            scale = 0.32 + 0.68 * p;
+                        } else {
+                            x = laneCenter;
+                            y = entry.y;
+                            scale = 1;
+                        }
+                        entry.el.style.setProperty('--x', x + '%');
+                        entry.el.style.setProperty('--item-scale', scale.toFixed(3));
+                        entry.el.style.top = y + '%';
+                        entry.el.style.zIndex = 2 + Math.round(t * 40);
+                    };
+                    var repositionAll = function() {
+                        for (var i = 0; i < items.length; i++) positionItem(items[i]);
                     };
                     var clearItems = function() {
                         for (var i = 0; i < items.length; i++) {
@@ -3130,11 +3287,12 @@
                           , lane = randomInt(0, LANES - 1)
                           , el = document.createElement('div');
                         el.className = 'falling-item';
-                        el.style.setProperty('--lane', lane);
-                        el.style.top = '0%';
+                        el.dataset.lane = lane;
                         el.textContent = treat.symbol;
                         sky.appendChild(el);
-                        items.push({ el: el, treat: treat, lane: lane, y: 0 });
+                        var entry = { el: el, treat: treat, lane: lane, y: 0 };
+                        positionItem(entry);
+                        items.push(entry);
                     };
                     var applyOutcome = function(entry) {
                         var treat = entry.treat, gained;
@@ -3166,6 +3324,7 @@
                         clockBase = elapsedSeconds();
                         clockStartedAt = null;
                         stopLoop();
+                        land();
                         audio.stopMusic();
                         audio.gameOver();
                         var accuracy = quizAnswered ? Math.round((quizCorrect / quizAnswered) * 100) : 0;
@@ -3178,12 +3337,16 @@
                         items.splice(index, 1);
                         if (entry.el.parentNode) entry.el.parentNode.removeChild(entry.el);
                         resolvedCount++;
-                        if (entry.lane === bunnyLane) {
+                        if (entry.lane === bunnyLane && !airborne) {
                             applyOutcome(entry);
                             if (lives < 1) {
                                 finishGame('The bunny ran out of lives.');
                                 return;
                             }
+                        } else if (entry.lane === bunnyLane && !entry.treat.good) {
+                            score += 1;
+                            addEvent('Jumped clean over the ' + entry.treat.label.toLowerCase() + '. +1.', '\uD83E\uDD98');
+                            updateStats();
                         } else if (entry.treat.good) {
                             combo = 1;
                             updateStats();
@@ -3212,7 +3375,7 @@
                                 resolveItem(items[i], i);
                                 if (!running || quizOpen) return;
                             } else {
-                                items[i].el.style.top = items[i].y + '%';
+                                positionItem(items[i]);
                             }
                         }
                         rafId = requestAnimationFrame(step);
@@ -3298,6 +3461,7 @@
                         if (quizOpen || gameOver) return;
                         quizOpen = true;
                         stopLoop();
+                        land();
                         clearItems();
                         field.classList.remove('is-intro');
                         field.classList.add('is-quiz');
@@ -3373,6 +3537,7 @@
                         clockBase = elapsedSeconds();
                         clockStartedAt = null;
                         stopLoop();
+                        land();
                         audio.stopMusic();
                         messageEl.textContent = 'Paused. Press Start to carry on.';
                         addEvent('Game paused.', '⏸️');
@@ -3384,6 +3549,7 @@
                         gameOver = false;
                         startedOnce = false;
                         stopLoop();
+                        land();
                         audio.stopMusic();
                         clearItems();
                         overlay.hidden = true;
@@ -3415,6 +3581,19 @@
                         resetIdle();
                         startGame();
                     });
+                    var applyMode = function() {
+                        if (is3d) field.classList.add('is-3d');
+                        else field.classList.remove('is-3d');
+                        modeEl.setAttribute('aria-pressed', is3d ? 'true' : 'false');
+                        modeEl.textContent = is3d ? '3D view' : '2D view';
+                        repositionAll();
+                    };
+                    modeEl.addEventListener('click', function() {
+                        is3d = !is3d;
+                        try { localStorage.setItem('bunny-3d', is3d ? 'on' : 'off'); } catch (e) {}
+                        applyMode();
+                        addEvent(is3d ? 'Switched to 3D view.' : 'Switched to 2D view.', is3d ? '\uD83D\uDD7D' : '\uD83D\uDDBC');
+                    });
                     howEl.addEventListener('click', function() {
                         if (quizOpen) return;
                         if (field.classList.contains('is-intro')) {
@@ -3433,6 +3612,7 @@
                         soundEl.innerHTML = next ? '🔊 Sound' : '🔇 Muted';
                         if (next && running && !quizOpen) audio.startMusic();
                     });
+                    jumpEl.addEventListener('click', jump);
                     laneWrap.addEventListener('click', function(event) {
                         var button = event.target.closest ? event.target.closest('button') : null;
                         if (!button || button.disabled) return;
@@ -3447,6 +3627,16 @@
                     on('keydown', function(event) {
                         if (quizOpen || !running) return;
                         var key = event.key;
+                        if (key === ' ' || key === 'Spacebar' || key === 'ArrowUp' || key === 'w' || key === 'W') {
+                            jump();
+                            event.preventDefault();
+                            return;
+                        }
+                        if (key >= '1' && key <= String(LANES)) {
+                            setLane(parseInt(key, 10) - 1, true);
+                            event.preventDefault();
+                            return;
+                        }
                         if (key === 'ArrowLeft' || key === 'a' || key === 'A') {
                             setLane(bunnyLane - 1, true);
                             event.preventDefault();
@@ -3473,6 +3663,7 @@
                         if (document.hidden && running && !quizOpen) stopGame();
                     });
 
+                    applyMode();
                     soundEl.setAttribute('aria-pressed', audio.isOn() ? 'true' : 'false');
                     soundEl.innerHTML = audio.isOn() ? '🔊 Sound' : '🔇 Muted';
                     resetIdle();
