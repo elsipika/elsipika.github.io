@@ -568,7 +568,7 @@
             }
             .game-stats {
                 display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 0.35rem;
             }
             .game-stat {
@@ -670,136 +670,443 @@
                 color: var(--muted);
                 border-color: var(--border);
             }
-            .rabbit-tunnel {
+            .bunny-field {
                 position: relative;
-                min-height: 14rem;
-                padding: 0.8rem 0.7rem 0.65rem;
+                display: flex;
+                flex-direction: column;
+                min-height: 17rem;
+                padding: 0.5rem 0.5rem 0.55rem;
                 border: 1px solid var(--border);
                 border-radius: 0.4rem;
                 background:
-                    linear-gradient(180deg, rgba(141,79,184,0.11) 0 22%, transparent 22%),
+                    linear-gradient(180deg, rgba(141,79,184,0.11) 0 18%, transparent 18%),
                     var(--surface-strong);
                 overflow: hidden;
+                touch-action: manipulation;
             }
-            .rabbit-runner {
+            .field-sky {
+                position: relative;
+                flex: 1 1 auto;
+                min-height: 11.5rem;
+                cursor: pointer;
+                overflow: hidden;
+            }
+            .lane-guides {
                 position: absolute;
-                left: var(--rabbit-left, 0.75rem);
-                top: var(--rabbit-top, 0.7rem);
-                width: 2.6rem;
-                height: 2.6rem;
-                display: block;
-                padding: 0.18rem;
-                border: 1px solid var(--border);
-                border-radius: 0.8rem;
-                background: var(--accent-soft);
-                transition: left 1.35s ease, top 1.35s ease, transform 1.05s ease;
-                animation: rabbit-hop 2.1s ease-in-out infinite;
+                inset: 0;
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                pointer-events: none;
+            }
+            .lane-guides span + span {
+                border-left: 1px dashed var(--border);
+                opacity: 0.6;
+            }
+            .catch-line {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 86%;
+                border-top: 1px dashed var(--accent);
+                opacity: 0.35;
+                pointer-events: none;
+            }
+            .falling-item {
+                position: absolute;
+                top: 0;
+                left: calc(var(--lane, 0) * 25% + 12.5%);
+                width: 1.75rem;
+                height: 1.75rem;
+                display: grid;
+                place-items: center;
+                margin: -0.875rem 0 0 -0.875rem;
+                font-size: 1.15rem;
+                line-height: 1;
+                pointer-events: none;
                 z-index: 2;
             }
-            .rabbit-runner img {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                border-radius: 0.55rem;
-                display: block;
+            .bunny-runner {
+                position: absolute;
+                bottom: 0.2rem;
+                left: calc(var(--bunny-lane, 0) * 25% + 12.5%);
+                width: 2.7rem;
+                height: 2.7rem;
+                margin-left: -1.35rem;
+                transition: left 0.13s ease-out, transform 0.16s ease-out;
+                z-index: 3;
             }
-            .rabbit-runner:after {
-                content: attr(data-action-label);
+            .bunny-runner:before {
+                content: '';
                 position: absolute;
                 left: 50%;
-                top: -0.85rem;
+                top: 50%;
+                width: 3.3rem;
+                height: 3.3rem;
+                margin: -1.65rem 0 0 -1.65rem;
+                border-radius: 50%;
+                background: radial-gradient(circle at 50% 46%, var(--accent-soft) 0 46%, transparent 72%);
+                transition: background 0.2s ease;
+                pointer-events: none;
+            }
+            .bunny-runner img {
+                display: block;
+                position: relative;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border: 2px solid var(--accent);
+                border-radius: 50%;
+                background: #fff;
+                box-shadow: 0 0.14rem 0.24rem rgba(76,38,104,0.32);
+                image-rendering: pixelated;
+                animation: bunny-hop 1.5s ease-in-out infinite;
+            }
+            .bunny-runner.lean-left {
+                transform: rotate(-10deg);
+            }
+            .bunny-runner.lean-right {
+                transform: rotate(10deg);
+            }
+            .bunny-runner:after {
+                content: attr(data-pop);
+                position: absolute;
+                left: 50%;
+                top: -0.95rem;
                 transform: translateX(-50%);
                 color: var(--accent-strong);
                 font-family: var(--mono);
                 font-size: 0.44em;
                 font-weight: 700;
                 white-space: nowrap;
-                text-transform: uppercase;
                 opacity: 0;
-                transition: opacity 0.2s ease;
+                transition: opacity 0.25s ease;
             }
-            .rabbit-runner.action-smell:after,
-            .rabbit-runner.action-think:after {
+            .bunny-runner.is-popping:after {
                 opacity: 1;
             }
-            .rabbit-runner.action-roll {
-                transform: rotate(360deg);
+            .bunny-runner.is-treat:before {
+                background: radial-gradient(circle at 50% 46%, rgba(141,79,184,0.42) 0 44%, transparent 74%);
             }
-            .rabbit-runner.action-think {
-                transform: translateY(-0.12rem);
+            .bunny-runner.is-treat img {
+                animation: bunny-cheer 0.55s ease-in-out;
             }
-            .game-cursor {
-                position: absolute;
-                left: var(--cursor-left, 1.8rem);
-                top: var(--cursor-top, 2.95rem);
-                width: 1.25rem;
-                height: 1.25rem;
+            .bunny-runner.is-hit:before {
+                background: radial-gradient(circle at 50% 46%, rgba(208,69,58,0.34) 0 44%, transparent 74%);
+            }
+            .bunny-runner.is-hit img {
+                animation: bunny-shake 0.36s ease-in-out;
+            }
+            @keyframes bunny-hop {
+                0%, 100% { transform: translateY(0) scale(1, 1); }
+                28% { transform: translateY(-0.26rem) scale(0.94, 1.07); }
+                52% { transform: translateY(0) scale(1.08, 0.92); }
+                72% { transform: translateY(-0.05rem) scale(1, 1); }
+            }
+            @keyframes bunny-cheer {
+                0%, 100% { transform: translateY(0) scale(1, 1); }
+                35% { transform: translateY(-0.5rem) scale(1.14, 1.14); }
+                70% { transform: translateY(0) scale(1.06, 0.94); }
+            }
+            @keyframes bunny-shake {
+                0%, 100% { transform: translateX(0) rotate(0); }
+                20% { transform: translateX(-0.22rem) rotate(-7deg); }
+                60% { transform: translateX(0.22rem) rotate(7deg); }
+                85% { transform: translateX(-0.08rem) rotate(-3deg); }
+            }
+            .lane-buttons {
                 display: grid;
-                place-items: center;
-                color: var(--accent-strong);
-                filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
-                pointer-events: none;
-                transition: left 1.35s ease, top 1.35s ease;
-                z-index: 3;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 0.3rem;
+                flex: 0 0 auto;
+                margin-top: 0.45rem;
             }
-            @keyframes rabbit-hop {
-                0%, 100% { margin-top: 0; }
-                50% { margin-top: -0.28rem; }
-            }
-            .tunnel-track {
-                display: grid;
-                grid-template-columns: repeat(var(--choice-count, 3), minmax(0, 1fr));
-                gap: 0.4rem;
-                height: 100%;
-                padding-top: 3.45rem;
-            }
-            .tunnel-choice {
+            .lane-button {
                 min-width: 0;
-                min-height: 9.25rem;
-                padding: 0.35rem 0.25rem 0.45rem;
+                min-height: 1.85rem;
+                padding: 0 0.2rem;
                 border: 1px solid var(--border);
-                border-radius: 0.35rem;
+                border-radius: 0.3rem;
                 background: var(--surface-muted);
-                color: var(--heading);
+                color: var(--muted);
                 cursor: pointer;
                 font-family: var(--mono);
-                font-size: 0.52em;
+                font-size: 0.46em;
                 font-weight: 700;
-                line-height: 1.2;
+                line-height: 1.15;
                 text-transform: uppercase;
             }
-            .tunnel-image {
-                display: block;
-                width: min(100%, 5.4rem);
-                height: 5.8rem;
-                margin: 0.1rem auto 0.25rem;
-                object-fit: contain;
+            .lane-button:hover:not(:disabled) {
+                border-color: var(--accent);
+                color: var(--accent-strong);
             }
-            .tunnel-choice:focus-visible {
+            .lane-button:focus-visible {
                 outline: 2px solid var(--accent);
                 outline-offset: 2px;
             }
-            .tunnel-choice.is-hot {
+            .lane-button.is-active {
                 border-color: var(--accent);
                 background: var(--accent-soft);
-                box-shadow: 0 0 0 2px rgba(141,79,184,0.12);
-            }
-            .tunnel-choice.is-selected {
-                border-color: var(--accent);
+                color: var(--accent-strong);
                 box-shadow: inset 0 -2px 0 var(--accent);
             }
-            .tunnel-choice.is-revealed {
+            .lane-button:disabled {
+                cursor: default;
+                opacity: 0.5;
+            }
+            .quiz-overlay {
+                display: grid;
+                align-content: start;
+                gap: 0.4rem;
+                padding: 0.15rem 0.1rem;
+                text-align: left;
+            }
+            .quiz-overlay[hidden] {
+                display: none;
+            }
+            .bunny-field.is-quiz,
+            .bunny-field.is-intro {
+                min-height: 0;
+                justify-content: start;
                 background: var(--surface-strong);
             }
-            .tunnel-choice:disabled {
-                cursor: default;
-                opacity: 0.72;
+            .bunny-field.is-quiz .field-sky,
+            .bunny-field.is-quiz .lane-buttons,
+            .bunny-field.is-intro .field-sky,
+            .bunny-field.is-intro .lane-buttons {
+                display: none;
             }
-            .choice-symbol {
-                display: block;
-                margin-bottom: 0.2rem;
-                font-size: 2.3rem;
+            .intro-panel {
+                display: grid;
+                align-content: start;
+                gap: 0.45rem;
+                padding: 0.15rem 0.1rem;
+                text-align: left;
+            }
+            .intro-panel[hidden],
+            .bunny-field:not(.is-intro) .intro-panel {
+                display: none;
+            }
+            .intro-tag {
+                margin: 0;
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.46em;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+            .intro-lede {
+                margin: 0;
+                color: var(--heading);
+                font-family: var(--body);
+                font-size: 0.7em;
+                line-height: 1.35;
+            }
+            .intro-cols {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 0.4rem;
+            }
+            .intro-block,
+            .intro-rules {
+                min-width: 0;
+                padding: 0.45rem 0.5rem;
+                border: 1px solid var(--border);
+                border-radius: 0.3rem;
+                background: var(--surface-muted);
+            }
+            .intro-label {
+                margin: 0 0 0.3rem;
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.44em;
+                font-weight: 700;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+            }
+            .intro-list {
+                display: grid;
+                gap: 0.2rem;
+            }
+            .intro-list li {
+                display: grid;
+                grid-template-columns: 1.1rem minmax(0, 1fr) auto;
+                align-items: center;
+                gap: 0.3rem;
+                color: var(--heading);
+                font-family: var(--body);
+                font-size: 0.63em;
+                line-height: 1.25;
+            }
+            .intro-list li > span:first-child {
+                font-size: 1.15em;
                 line-height: 1;
+            }
+            .intro-list em {
+                font-family: var(--mono);
+                font-size: 0.88em;
+                font-weight: 700;
+                font-style: normal;
+                white-space: nowrap;
+            }
+            .intro-list em.plus {
+                color: #2f8055;
+            }
+            .intro-list em.minus {
+                color: #d0453a;
+            }
+            .intro-rules {
+                display: grid;
+                gap: 0.26rem;
+            }
+            .intro-rules p {
+                display: grid;
+                grid-template-columns: 4.4rem minmax(0, 1fr);
+                gap: 0.4rem;
+                margin: 0;
+                color: var(--muted);
+                font-family: var(--body);
+                font-size: 0.63em;
+                line-height: 1.35;
+            }
+            .intro-rules p > b:first-child {
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.86em;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+            }
+            .intro-num {
+                color: var(--heading);
+                font-family: var(--mono);
+                font-weight: 700;
+            }
+            .intro-key {
+                display: inline-block;
+                min-width: 1rem;
+                padding: 0 0.2rem;
+                border: 1px solid var(--border);
+                border-radius: 0.2rem;
+                background: var(--surface-strong);
+                color: var(--heading);
+                font-family: var(--mono);
+                font-size: 0.9em;
+                line-height: 1.3;
+                text-align: center;
+            }
+            .quiz-tag {
+                margin: 0;
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-size: 0.46em;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+            .quiz-question {
+                margin: 0;
+                color: var(--heading);
+                font-family: var(--body);
+                font-size: 0.72em;
+                font-weight: 700;
+                line-height: 1.35;
+            }
+            .quiz-options {
+                display: grid;
+                gap: 0.26rem;
+            }
+            .quiz-option {
+                min-width: 0;
+                padding: 0.38rem 0.5rem;
+                border: 1px solid var(--border);
+                border-radius: 0.3rem;
+                background: var(--surface-strong);
+                color: var(--heading);
+                cursor: pointer;
+                font-family: var(--body);
+                font-size: 0.66em;
+                line-height: 1.3;
+                text-align: left;
+                overflow-wrap: anywhere;
+            }
+            .quiz-option:hover:not(:disabled) {
+                border-color: var(--accent);
+                background: var(--accent-soft);
+            }
+            .quiz-option:focus-visible {
+                outline: 2px solid var(--accent);
+                outline-offset: 2px;
+            }
+            .quiz-option:before {
+                content: attr(data-marker) ' ';
+                color: var(--accent-strong);
+                font-family: var(--mono);
+                font-weight: 700;
+            }
+            .quiz-option:disabled {
+                cursor: default;
+            }
+            .quiz-option.is-correct {
+                border-color: #2f8055;
+                background: rgba(47,128,85,0.16);
+            }
+            .quiz-option.is-correct:before {
+                content: '\2713\00a0';
+                color: #2f8055;
+            }
+            .quiz-option.is-wrong {
+                border-color: #d0453a;
+                background: rgba(208,69,58,0.16);
+            }
+            .quiz-option.is-wrong:before {
+                content: '\2717\00a0';
+                color: #d0453a;
+            }
+            .quiz-feedback {
+                margin: 0;
+                min-height: 2.2rem;
+                color: var(--muted);
+                font-family: var(--body);
+                font-size: 0.64em;
+                line-height: 1.35;
+            }
+            .quiz-feedback b {
+                color: var(--heading);
+                font-weight: 700;
+            }
+            .sound-toggle {
+                min-height: 1.75rem;
+                padding: 0 0.6rem;
+                border: 1px solid var(--border);
+                border-radius: 0.3rem;
+                background: var(--surface-strong);
+                color: var(--muted);
+                cursor: pointer;
+                font-family: var(--mono);
+                font-size: 0.48em;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+            .sound-toggle[aria-pressed="true"] {
+                border-color: var(--accent);
+                background: var(--accent-soft);
+                color: var(--accent-strong);
+            }
+            .sound-toggle:focus-visible {
+                outline: 2px solid var(--accent);
+                outline-offset: 2px;
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .bunny-runner img,
+                .bunny-runner.is-treat img,
+                .bunny-runner.is-hit img {
+                    animation: none;
+                }
+                .bunny-runner.lean-left,
+                .bunny-runner.lean-right {
+                    transform: none;
+                }
             }
             .hero-layout {
                 display: grid;
@@ -1571,22 +1878,28 @@
                     padding: 0.55rem;
                 }
                 .game-stats {
-                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                    grid-template-columns: repeat(4, minmax(0, 1fr));
                 }
-                .rabbit-tunnel {
-                    min-height: 12.5rem;
+                .bunny-field {
+                    min-height: 15rem;
                 }
-                .tunnel-track {
-                    gap: 0.25rem;
+                .field-sky {
+                    min-height: 10rem;
                 }
-                .tunnel-choice {
-                    font-size: 0.44em;
-                    padding-left: 0.15rem;
-                    padding-right: 0.15rem;
-                    min-height: 8.25rem;
+                .lane-buttons {
+                    gap: 0.22rem;
                 }
-                .tunnel-image {
-                    height: 4.9rem;
+                .lane-button {
+                    font-size: 0.42em;
+                    padding-left: 0.1rem;
+                    padding-right: 0.1rem;
+                }
+                .intro-cols {
+                    grid-template-columns: 1fr;
+                }
+                .intro-rules p {
+                    grid-template-columns: 1fr;
+                    gap: 0.08rem;
                 }
                 .role-line,
                 .hero-summary,
@@ -1816,35 +2129,86 @@
 
                         <div data-scroll-id="mini-game" aria-hidden="true"></div>
 
-                        <!-- Rabbit Tunnel Game -->
-                        <div class="game-section" role="region" aria-label="Rabbit tunnel mini game">
+                        <!-- Feed the Bunny Game -->
+                        <div class="game-section" role="region" aria-label="Feed the bunny mini game">
                             <div class="header-game">
                                 <div class="game-panel">
-                                    <p class="game-title">Rabbit Tunnel <span>pick a path</span></p>
+                                    <p class="game-title">Feed the Bunny <span>catch &amp; dodge</span></p>
                                     <p class="game-welcome">Welcome to try my mini game!</p>
-                                    <p class="game-instructions">Click "Start" to start the game<br/>"Click" the tunnel to select it.</p>
+                                    <p class="game-instructions">Press "Start" to play.<br/>Move with &#8592; &#8594; or tap a lane.</p>
                                     <div class="game-stats" aria-label="Game status">
-                                        <div class="game-stat"><strong id="rabbit-score">0</strong><span>Score</span></div>
-                                        <div class="game-stat"><strong id="rabbit-lives">1</strong><span>Lives</span></div>
-                                        <div class="game-stat"><strong id="rabbit-time">0:00</strong><span>Clock</span></div>
+                                        <div class="game-stat"><strong id="bunny-score">0</strong><span>Score</span></div>
+                                        <div class="game-stat"><strong id="bunny-lives">3</strong><span>Lives</span></div>
+                                        <div class="game-stat"><strong id="bunny-combo">x1</strong><span>Combo</span></div>
+                                        <div class="game-stat"><strong id="bunny-quiz">0/0</strong><span>Quiz</span></div>
                                     </div>
-                                    <p id="rabbit-message" class="game-message">Guide the rabbit into one tunnel. Treasure helps. Poop, snakes, lizards, and land mines do not.</p>
+                                    <p id="bunny-message" class="game-message">Carrots, blueberries and toys feed the bunny. Poop, lizards, snakes and land mines do not.</p>
                                     <div class="game-controls">
-                                        <button type="button" id="rabbit-start" class="game-reset">Start</button>
-                                        <button type="button" id="rabbit-stop" class="game-reset">Stop</button>
-                                        <button type="button" id="rabbit-restart" class="game-reset">Restart</button>
+                                        <button type="button" id="bunny-start" class="game-reset">Start</button>
+                                        <button type="button" id="bunny-stop" class="game-reset">Stop</button>
+                                        <button type="button" id="bunny-restart" class="game-reset">Restart</button>
+                                        <button type="button" id="bunny-how" class="game-reset">How to play</button>
+                                        <button type="button" id="bunny-sound" class="sound-toggle" aria-pressed="true">&#128266; Sound</button>
                                     </div>
                                     <div class="game-log-panel">
                                         <p class="game-log-title">Event log <span>latest at bottom</span></p>
-                                        <ol id="rabbit-log" class="game-log" aria-live="polite"></ol>
+                                        <ol id="bunny-log" class="game-log" aria-live="polite"></ol>
                                     </div>
                                 </div>
-                                <div class="rabbit-tunnel">
-                                    <div id="rabbit-runner" class="rabbit-runner" data-action-label="hop" aria-hidden="true">
-                                        <img src="images/rabbit.gif" alt=""/>
+                                <div id="bunny-field" class="bunny-field is-intro">
+                                    <div id="field-sky" class="field-sky">
+                                        <div class="lane-guides" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+                                        <div class="catch-line" aria-hidden="true"></div>
+                                        <div id="bunny-runner" class="bunny-runner" data-pop="" aria-hidden="true">
+                                            <img src="images/rabbit.gif" alt=""/>
+                                        </div>
                                     </div>
-                                    <div id="game-cursor" class="game-cursor" aria-hidden="true">⌄</div>
-                                    <div id="tunnel-track" class="tunnel-track" role="group" aria-label="Tunnel choices"></div>
+                                    <div id="lane-buttons" class="lane-buttons" role="group" aria-label="Lane controls">
+                                        <button type="button" class="lane-button" data-lane="0">Lane 1</button>
+                                        <button type="button" class="lane-button" data-lane="1">Lane 2</button>
+                                        <button type="button" class="lane-button" data-lane="2">Lane 3</button>
+                                        <button type="button" class="lane-button" data-lane="3">Lane 4</button>
+                                    </div>
+                                    <div id="quiz-overlay" class="quiz-overlay" role="dialog" aria-modal="true" aria-labelledby="quiz-question" hidden>
+                                        <p class="quiz-tag" id="quiz-tag">Brain break</p>
+                                        <p class="quiz-question" id="quiz-question"></p>
+                                        <div class="quiz-options" id="quiz-options"></div>
+                                        <p class="quiz-feedback" id="quiz-feedback"></p>
+                                        <div class="game-controls">
+                                            <button type="button" id="quiz-continue" class="game-reset" hidden>Continue &#8594;</button>
+                                        </div>
+                                    </div>
+                                    <div id="intro-panel" class="intro-panel" role="region" aria-label="How to play">
+                                        <p class="intro-tag">How to play</p>
+                                        <p class="intro-lede">Treats and hazards fall down four lanes. Slide the bunny under the good stuff and out from under the bad.</p>
+                                        <div class="intro-cols">
+                                            <div class="intro-block">
+                                                <p class="intro-label">Catch these</p>
+                                                <ul class="intro-list">
+                                                    <li><span aria-hidden="true">&#129528;</span><b>Bunny toy</b><em class="plus">+6</em></li>
+                                                    <li><span aria-hidden="true">&#129744;</span><b>Blueberries</b><em class="plus">+5</em></li>
+                                                    <li><span aria-hidden="true">&#129365;</span><b>Carrot</b><em class="plus">+3</em></li>
+                                                    <li><span aria-hidden="true">&#128048;</span><b>Bunny friend</b><em class="plus">+2 &amp; life</em></li>
+                                                </ul>
+                                            </div>
+                                            <div class="intro-block">
+                                                <p class="intro-label">Dodge these</p>
+                                                <ul class="intro-list">
+                                                    <li><span aria-hidden="true">&#128013;</span><b>Snake</b><em class="minus">&#8722;5</em></li>
+                                                    <li><span aria-hidden="true">&#128169;</span><b>Poop</b><em class="minus">&#8722;3</em></li>
+                                                    <li><span aria-hidden="true">&#129422;</span><b>Lizard</b><em class="minus">&#8722;2</em></li>
+                                                    <li><span aria-hidden="true">&#128165;</span><b>Land mine</b><em class="minus">&#8722;1 life</em></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="intro-rules">
+                                            <p><b>Move</b><span><kbd class="intro-key">&#8592;</kbd> <kbd class="intro-key">&#8594;</kbd> or <kbd class="intro-key">A</kbd> <kbd class="intro-key">D</kbd>, tap a lane button, or tap the field.</span></p>
+                                            <p><b>Combo</b><span>Each treat in a row raises the multiplier up to <b class="intro-num">&#215;5</b>, and treat points are multiplied by it. A hazard or a missed treat drops you back to &#215;1.</span></p>
+                                            <p><b>Dodging</b><span>Letting a hazard fall past you is worth <b class="intro-num">+1</b>.</span></p>
+                                            <p><b>Lives</b><span>You start with <b class="intro-num">3</b> and can hold <b class="intro-num">5</b>. Only land mines and bunny friends change them. At zero the run ends.</span></p>
+                                            <p><b>Brain break</b><span>Every <b class="intro-num">12</b> items the field pauses for one QA, IQ or frontend question. Right answer: <b class="intro-num">+10</b> points and <b class="intro-num">+1</b> life. Wrong costs nothing. Either way the field speeds up after.</span></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2245,74 +2609,465 @@
                     }
                 }());
                 (function() {
-                    var track = $('#tunnel-track')
-                      , runner = $('#rabbit-runner')
-                      , gameCursor = $('#game-cursor')
-                      , scoreEl = $('#rabbit-score')
-                      , livesEl = $('#rabbit-lives')
-                      , timeEl = $('#rabbit-time')
-                      , messageEl = $('#rabbit-message')
-                      , logEl = $('#rabbit-log')
-                      , startEl = $('#rabbit-start')
-                      , stopEl = $('#rabbit-stop')
-                      , restartEl = $('#rabbit-restart');
-                    if (!track || !runner || !gameCursor || !scoreEl || !livesEl || !timeEl || !messageEl || !logEl || !startEl || !stopEl || !restartEl) return;
+                    var field = $('#bunny-field')
+                      , sky = $('#field-sky')
+                      , bunny = $('#bunny-runner')
+                      , laneWrap = $('#lane-buttons')
+                      , scoreEl = $('#bunny-score')
+                      , livesEl = $('#bunny-lives')
+                      , comboEl = $('#bunny-combo')
+                      , quizStatEl = $('#bunny-quiz')
+                      , messageEl = $('#bunny-message')
+                      , logEl = $('#bunny-log')
+                      , startEl = $('#bunny-start')
+                      , stopEl = $('#bunny-stop')
+                      , restartEl = $('#bunny-restart')
+                      , soundEl = $('#bunny-sound')
+                      , howEl = $('#bunny-how')
+                      , introEl = $('#intro-panel')
+                      , overlay = $('#quiz-overlay')
+                      , qTag = $('#quiz-tag')
+                      , qQuestion = $('#quiz-question')
+                      , qOptions = $('#quiz-options')
+                      , qFeedback = $('#quiz-feedback')
+                      , qContinue = $('#quiz-continue');
+                    if (!field || !sky || !bunny || !laneWrap || !scoreEl || !livesEl || !comboEl || !quizStatEl || !messageEl || !logEl || !startEl || !stopEl || !restartEl || !soundEl || !howEl || !introEl || !overlay || !qTag || !qQuestion || !qOptions || !qFeedback || !qContinue) return;
 
-                    var outcomes = [
-                        { id: 'carrot', label: 'Carrot', symbol: '🥕', points: 3, message: 'Carrot found. +3 points.' },
-                        { id: 'toy', label: 'Toy', symbol: '🧸', points: 6, message: 'A bunny toy. +6 points.' },
-                        { id: 'rabbit', label: 'Rabbit', symbol: '🐰', points: 2, lives: 1, message: 'A friend joins. +2 points and +1 life.' },
-                        { id: 'blueberries', label: 'Blueberries', symbol: '🫐', points: 5, message: 'Blueberries. +5 points.' },
-                        { id: 'poop', label: 'Poop', symbol: '💩', points: -3, message: 'Poop pile. -3 points.' },
-                        { id: 'snake', label: 'Snake', symbol: '🐍', points: -5, message: 'Snake bite. -5 points.' },
-                        { id: 'lizard', label: 'Lizard', symbol: '🦎', points: -2, message: 'Lizard scare. -2 points.' },
-                        { id: 'mine', label: 'Land mine', symbol: '💥', points: 0, lives: -1, message: 'Land mine. -1 life.' }
-                      ]
-                      , score = 0
-                      , lives = 1
-                      , clockBase = 0
-                      , clockStartedAt = null
-                      , timer = null
-                      , actionTimer = null
-                      , wanderTimer = null
-                      , round = []
-                      , locked = false
-                      , gameOver = false
+                    var LANES = 4
+                      , CATCH_LINE = 86
+                      , QUIZ_EVERY = 12
+                      , MAX_COMBO = 5
+                      , MAX_LIVES = 5;
+
+                    var TREATS = [
+                        { id: 'carrot', symbol: '🥕', label: 'Carrot', points: 3, good: true, weight: 20 },
+                        { id: 'blueberries', symbol: '🫐', label: 'Blueberries', points: 5, good: true, weight: 16 },
+                        { id: 'toy', symbol: '🧸', label: 'Bunny toy', points: 6, good: true, weight: 14 },
+                        { id: 'friend', symbol: '🐰', label: 'Bunny friend', points: 2, lives: 1, good: true, weight: 10 },
+                        { id: 'poop', symbol: '💩', label: 'Poop', points: -3, good: false, weight: 11 },
+                        { id: 'lizard', symbol: '🦎', label: 'Lizard', points: -2, good: false, weight: 11 },
+                        { id: 'snake', symbol: '🐍', label: 'Snake', points: -5, good: false, weight: 10 },
+                        { id: 'mine', symbol: '💥', label: 'Land mine', points: 0, lives: -1, good: false, weight: 8 }
+                    ];
+                    var TOTAL_WEIGHT = (function() {
+                        var sum = 0, i;
+                        for (i = 0; i < TREATS.length; i++) sum += TREATS[i].weight;
+                        return sum;
+                    }());
+
+                    var QUIZ_SETS = [
+                        {
+                            tag: 'Brain break \u00b7 QA',
+                            questions: [
+                                {
+                                    q: 'A test passes sometimes and fails other times, with no code change. What is it called?',
+                                    options: ['A flaky test', 'A fast test', 'A unit test', 'A clean test'],
+                                    answer: 0,
+                                    why: 'Flaky tests pass and fail on the same code. Find the timing problem instead of re-running until it goes green.'
+                                },
+                                {
+                                    q: 'What does QA stand for?',
+                                    options: ['Quality Assurance', 'Quick Answers', 'Query Analysis', 'Quiet Automation'],
+                                    answer: 0,
+                                    why: 'QA is about making sure the product works before the user finds out that it does not.'
+                                },
+                                {
+                                    q: 'You just found a bug. What do you write down first?',
+                                    options: ['The steps to reproduce it', 'Who you think broke it', 'How long it took to find', 'Your favourite fix'],
+                                    answer: 0,
+                                    why: 'A bug nobody can reproduce will not get fixed. Steps come first, always.'
+                                },
+                                {
+                                    q: 'A field accepts numbers from 1 to 100. Which extra value is worth testing?',
+                                    options: ['101', '50', '25', '73'],
+                                    answer: 0,
+                                    why: 'Bugs love the edges. Test just outside the limit as well as just inside it.'
+                                },
+                                {
+                                    q: 'What is a smoke test?',
+                                    options: ['A quick check that the main features still work', 'A test that runs for hours', 'A test of the fire alarm', 'A test written after release'],
+                                    answer: 0,
+                                    why: 'Smoke tests answer one question fast: is this build worth testing any further?'
+                                },
+                                {
+                                    q: 'Severity of a bug describes...',
+                                    options: ['How much damage it causes', 'How long it takes to fix', 'Who reported it', 'How old the code is'],
+                                    answer: 0,
+                                    why: 'Severity is impact. Priority is the separate question of what gets fixed first.'
+                                },
+                                {
+                                    q: 'Which one should always be in a bug report?',
+                                    options: ['Expected result and actual result', 'An apology', 'A guess at the root cause', 'The developer’s name'],
+                                    answer: 0,
+                                    why: 'Expected versus actual is the whole point. It shows exactly what is wrong.'
+                                },
+                                {
+                                    q: 'Regression testing checks that...',
+                                    options: ['Old features still work after a change', 'New features are pretty', 'The site loads quickly', 'The code has comments'],
+                                    answer: 0,
+                                    why: 'It protects what already worked. New code gets tested by its own new tests.'
+                                },
+                                {
+                                    q: 'Which tool automates testing a website in a browser?',
+                                    options: ['Playwright', 'Photoshop', 'Excel', 'Figma'],
+                                    answer: 0,
+                                    why: 'Playwright drives a real browser and clicks through the app the way a user would.'
+                                },
+                                {
+                                    q: 'A test never fails, even when you deliberately break the feature. That test is...',
+                                    options: ['Useless — it is not really checking anything', 'Excellent', 'Fast', 'Ready to ship'],
+                                    answer: 0,
+                                    why: 'A test that cannot fail gives false confidence. Break the code on purpose to prove your test works.'
+                                },
+                                {
+                                    q: 'On a healthy team, who is responsible for quality?',
+                                    options: ['Everyone', 'Only the QA engineer', 'Only the manager', 'Only the designer'],
+                                    answer: 0,
+                                    why: 'QA leads the effort, but developers, designers and product all own the outcome.'
+                                },
+                                {
+                                    q: 'Before filing a bug, what is worth checking?',
+                                    options: ['Whether it has already been reported', 'The weather', 'The office wifi password', 'Your inbox'],
+                                    answer: 0,
+                                    why: 'Duplicate reports waste everyone’s time. Search the tracker first.'
+                                }
+                            ]
+                        },
+                        {
+                            tag: 'Brain break \u00b7 IQ',
+                            questions: [
+                                {
+                                    q: 'What comes next? 2, 4, 8, 16, ...',
+                                    options: ['32', '18', '24', '20'],
+                                    answer: 0,
+                                    why: 'Each number doubles the one before it, so 16 × 2 = 32.'
+                                },
+                                {
+                                    q: 'All bunnies have ears. Coco is a bunny. So Coco...',
+                                    options: ['has ears', 'might have ears', 'has no ears', 'is not a bunny'],
+                                    answer: 0,
+                                    why: 'If every bunny has ears and Coco is a bunny, the conclusion is certain.'
+                                },
+                                {
+                                    q: 'Which one does not belong? Carrot, apple, banana, chair',
+                                    options: ['Chair', 'Carrot', 'Apple', 'Banana'],
+                                    answer: 0,
+                                    why: 'The other three are all food. A chair is furniture.'
+                                },
+                                {
+                                    q: 'What comes next? 3, 6, 9, 12, ...',
+                                    options: ['15', '14', '16', '18'],
+                                    answer: 0,
+                                    why: 'The pattern adds 3 each time.'
+                                },
+                                {
+                                    q: 'Rearrange the letters of LISTEN to make which word?',
+                                    options: ['SILENT', 'TINSEL', 'ENLIST', 'All of these'],
+                                    answer: 3,
+                                    why: 'LISTEN, SILENT, TINSEL and ENLIST all use exactly the same six letters.'
+                                },
+                                {
+                                    q: 'If 5 pens cost 10 dollars, what does 1 pen cost?',
+                                    options: ['2 dollars', '5 dollars', '1 dollar', '10 dollars'],
+                                    answer: 0,
+                                    why: '10 divided by 5 is 2.'
+                                },
+                                {
+                                    q: 'Which one does not belong? Circle, square, triangle, red',
+                                    options: ['Red', 'Circle', 'Square', 'Triangle'],
+                                    answer: 0,
+                                    why: 'The others are shapes. Red is a colour.'
+                                },
+                                {
+                                    q: 'What comes next? 1, 1, 2, 3, 5, 8, ...',
+                                    options: ['13', '11', '10', '16'],
+                                    answer: 0,
+                                    why: 'Each number is the sum of the two before it: 5 + 8 = 13.'
+                                },
+                                {
+                                    q: 'Tom is taller than Ann. Ann is taller than Sam. Who is shortest?',
+                                    options: ['Sam', 'Ann', 'Tom', 'Cannot tell'],
+                                    answer: 0,
+                                    why: 'Order them: Tom, then Ann, then Sam.'
+                                },
+                                {
+                                    q: 'What is half of one quarter?',
+                                    options: ['One eighth', 'One half', 'One quarter', 'One third'],
+                                    answer: 0,
+                                    why: '1/4 divided by 2 is 1/8.'
+                                },
+                                {
+                                    q: 'Monday is to Tuesday as June is to...',
+                                    options: ['July', 'May', 'January', 'Sunday'],
+                                    answer: 0,
+                                    why: 'Both pairs step forward by one, a day then a month.'
+                                },
+                                {
+                                    q: 'What comes next? 20, 17, 14, 11, ...',
+                                    options: ['8', '9', '7', '10'],
+                                    answer: 0,
+                                    why: 'The pattern subtracts 3 each time.'
+                                }
+                            ]
+                        },
+                        {
+                            tag: 'Brain break \u00b7 Frontend',
+                            questions: [
+                                {
+                                    q: 'Which HTML tag creates a clickable link?',
+                                    options: ['<a>', '<p>', '<div>', '<img>'],
+                                    answer: 0,
+                                    why: 'The anchor tag &lt;a href="..."&gt; is what makes a link a link.'
+                                },
+                                {
+                                    q: 'What does CSS stand for?',
+                                    options: ['Cascading Style Sheets', 'Creative Style System', 'Computer Styled Syntax', 'Central Style Source'],
+                                    answer: 0,
+                                    why: 'Cascading refers to how later and more specific rules override earlier ones.'
+                                },
+                                {
+                                    q: 'Which CSS property changes the colour of text?',
+                                    options: ['color', 'background', 'border', 'font-family'],
+                                    answer: 0,
+                                    why: 'color sets the text itself. background-color sets what is behind it.'
+                                },
+                                {
+                                    q: 'What is alt text on an image for?',
+                                    options: ['Screen readers, and when the image fails to load', 'Making the image bigger', 'Adding a border', 'Speeding up the page'],
+                                    answer: 0,
+                                    why: 'Alt text describes the image to people who cannot see it. Decorative images get alt="".'
+                                },
+                                {
+                                    q: 'Which CSS unit scales with the user’s chosen font size?',
+                                    options: ['rem', 'px', 'pt', 'cm'],
+                                    answer: 0,
+                                    why: 'rem is relative to the root font size, so it respects the user’s browser settings.'
+                                },
+                                {
+                                    q: 'Responsive design means the layout...',
+                                    options: ['Adapts to different screen sizes', 'Loads instantly', 'Uses lots of animation', 'Only works on desktop'],
+                                    answer: 0,
+                                    why: 'One layout that works on a phone, a tablet and a laptop.'
+                                },
+                                {
+                                    q: 'Which element should you use for something a user clicks to act?',
+                                    options: ['<button>', '<div>', '<span>', '<p>'],
+                                    answer: 0,
+                                    why: 'A real button is keyboard focusable and announced correctly. A clickable div is none of that.'
+                                },
+                                {
+                                    q: 'What makes text easiest to read?',
+                                    options: ['Strong contrast between text and background', 'A very thin font', 'Light grey on white', 'All capital letters'],
+                                    answer: 0,
+                                    why: 'Contrast is the single biggest readability factor, and it is an accessibility requirement.'
+                                },
+                                {
+                                    q: 'Which CSS tool lays items out in rows and columns at once?',
+                                    options: ['Grid', 'Float', 'Position', 'Opacity'],
+                                    answer: 0,
+                                    why: 'CSS Grid handles two dimensions. Flexbox is the one-direction tool.'
+                                },
+                                {
+                                    q: 'What is <h1> used for?',
+                                    options: ['The main heading of the page', 'The biggest text anywhere', 'A footer note', 'A horizontal line'],
+                                    answer: 0,
+                                    why: 'Headings describe structure, not size. Use one h1 for the page’s main title.'
+                                },
+                                {
+                                    q: 'Why keep tap targets large on mobile?',
+                                    options: ['Fingers are less precise than a mouse', 'It looks more modern', 'It saves battery', 'It loads faster'],
+                                    answer: 0,
+                                    why: 'Around 44 by 44 pixels is the usual minimum for a comfortable tap.'
+                                },
+                                {
+                                    q: 'What is a favicon?',
+                                    options: ['The small icon shown in the browser tab', 'A favourite font', 'A CSS animation', 'A type of button'],
+                                    answer: 0,
+                                    why: 'It is how people find your tab among twenty others.'
+                                }
+                            ]
+                        }
+                    ];
+
+                    var audio = (function() {
+                        var Ctx = window.AudioContext || window.webkitAudioContext
+                          , ctx = null
+                          , master = null
+                          , musicBus = null
+                          , musicTimer = null
+                          , musicStep = 0
+                          , enabled = true;
+                        try {
+                            if (localStorage.getItem('bunny-sound') === 'off') enabled = false;
+                        } catch (e) {}
+
+                        var A2 = 110, C3 = 130.81, F2 = 87.31, G2 = 98
+                          , E4 = 329.63, G4 = 392, A4 = 440, C5 = 523.25, D5 = 587.33, E5 = 659.25;
+                        var LEAD = [
+                            A4, 0, C5, E5, D5, 0, C5, 0,
+                            A4, 0, G4, A4, C5, 0, 0, 0,
+                            E5, 0, D5, C5, A4, 0, C5, 0,
+                            G4, 0, E4, G4, A4, 0, 0, 0
+                        ];
+                        var BASS = [
+                            A2, 0, A2, 0, F2, 0, F2, 0,
+                            C3, 0, C3, 0, G2, 0, G2, 0,
+                            A2, 0, A2, 0, F2, 0, F2, 0,
+                            C3, 0, C3, 0, G2, 0, G2, 0
+                        ];
+
+                        var ensure = function() {
+                            if (!Ctx) return null;
+                            if (!ctx) {
+                                ctx = new Ctx();
+                                master = ctx.createGain();
+                                master.gain.value = 0.45;
+                                master.connect(ctx.destination);
+                                musicBus = ctx.createGain();
+                                musicBus.gain.value = 0.5;
+                                musicBus.connect(master);
+                            }
+                            if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
+                            return ctx;
+                        };
+                        var tone = function(freq, duration, type, at, level, bus) {
+                            if (!enabled || !ctx || !freq) return;
+                            var t = at || ctx.currentTime
+                              , osc = ctx.createOscillator()
+                              , gain = ctx.createGain();
+                            osc.type = type || 'square';
+                            osc.frequency.setValueAtTime(freq, t);
+                            gain.gain.setValueAtTime(0.0001, t);
+                            gain.gain.exponentialRampToValueAtTime(level || 0.3, t + 0.012);
+                            gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+                            osc.connect(gain);
+                            gain.connect(bus || master);
+                            osc.start(t);
+                            osc.stop(t + duration + 0.03);
+                        };
+                        var sweep = function(from, to, duration, type, level) {
+                            if (!enabled || !ctx) return;
+                            var t = ctx.currentTime
+                              , osc = ctx.createOscillator()
+                              , gain = ctx.createGain();
+                            osc.type = type || 'sawtooth';
+                            osc.frequency.setValueAtTime(from, t);
+                            osc.frequency.exponentialRampToValueAtTime(to, t + duration);
+                            gain.gain.setValueAtTime(level || 0.22, t);
+                            gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+                            osc.connect(gain);
+                            gain.connect(master);
+                            osc.start(t);
+                            osc.stop(t + duration + 0.03);
+                        };
+                        var run = function(notes, spacing, type, level) {
+                            if (!enabled || !ctx) return;
+                            for (var i = 0; i < notes.length; i++) {
+                                tone(notes[i], spacing * 0.92, type || 'square', ctx.currentTime + i * spacing, level || 0.26);
+                            }
+                        };
+
+                        return {
+                            isOn: function() { return enabled; },
+                            unlock: function() { ensure(); },
+                            setEnabled: function(next) {
+                                enabled = next;
+                                try { localStorage.setItem('bunny-sound', next ? 'on' : 'off'); } catch (e) {}
+                                if (!next) {
+                                    this.stopMusic();
+                                    if (master && ctx) master.gain.setValueAtTime(0.0001, ctx.currentTime);
+                                } else {
+                                    ensure();
+                                    if (master && ctx) master.gain.setValueAtTime(0.45, ctx.currentTime);
+                                }
+                            },
+                            startMusic: function() {
+                                if (!enabled || musicTimer) return;
+                                if (!ensure()) return;
+                                musicTimer = setInterval(function() {
+                                    if (!ctx || !enabled) return;
+                                    var i = musicStep % LEAD.length;
+                                    tone(LEAD[i], 0.2, 'square', ctx.currentTime, 0.1, musicBus);
+                                    tone(BASS[i], 0.26, 'triangle', ctx.currentTime, 0.24, musicBus);
+                                    musicStep++;
+                                }, 250);
+                            },
+                            stopMusic: function() {
+                                if (musicTimer) {
+                                    clearInterval(musicTimer);
+                                    musicTimer = null;
+                                }
+                            },
+                            duckMusic: function(down) {
+                                if (!ctx || !musicBus) return;
+                                musicBus.gain.setValueAtTime(down ? 0.12 : 0.5, ctx.currentTime);
+                            },
+                            move: function() { tone(320, 0.05, 'square', 0, 0.08); },
+                            treat: function(combo) { run([520 + combo * 40, 700 + combo * 50], 0.07, 'square', 0.24); },
+                            hazard: function() { sweep(300, 90, 0.22, 'sawtooth', 0.2); },
+                            lifeLost: function() { sweep(190, 55, 0.5, 'triangle', 0.32); },
+                            comboUp: function() { run([523.25, 659.25, 783.99], 0.06, 'square', 0.2); },
+                            checkpoint: function() { run([880, 1174.66], 0.16, 'sine', 0.24); },
+                            correct: function() { run([523.25, 659.25, 783.99, 1046.5], 0.09, 'square', 0.26); },
+                            wrong: function() { run([311.13, 233.08], 0.16, 'sawtooth', 0.2); },
+                            gameOver: function() { run([440, 349.23, 261.63, 174.61], 0.16, 'triangle', 0.3); }
+                        };
+                    }());
+
+                    var score = 0
+                      , lives = 3
+                      , combo = 1
+                      , level = 0
+                      , resolvedCount = 0
+                      , quizCorrect = 0
+                      , quizAnswered = 0
+                      , checkpointCount = 0
+                      , askedQuestions = [[], [], []]
+                      , items = []
+                      , bunnyLane = 1
                       , running = false
+                      , quizOpen = false
+                      , gameOver = false
                       , startedOnce = false
-                      , highlightedIndex = -1;
+                      , rafId = null
+                      , lastFrame = 0
+                      , spawnAcc = 0
+                      , popTimer = null
+                      , leanTimer = null
+                      , clockBase = 0
+                      , clockStartedAt = null;
 
                     var randomInt = function(min, max) {
                         return Math.floor(Math.random() * (max - min + 1)) + min;
                     };
-                    var pickOutcome = function() {
-                        var roll = Math.random();
-                        if (roll < 0.18) return outcomes[0];
-                        if (roll < 0.31) return outcomes[1];
-                        if (roll < 0.39) return outcomes[2];
-                        if (roll < 0.53) return outcomes[3];
-                        if (roll < 0.70) return outcomes[4];
-                        if (roll < 0.82) return outcomes[5];
-                        if (roll < 0.93) return outcomes[6];
-                        return outcomes[7];
+                    var pickTreat = function() {
+                        var roll = Math.random() * TOTAL_WEIGHT, i;
+                        for (i = 0; i < TREATS.length; i++) {
+                            roll -= TREATS[i].weight;
+                            if (roll <= 0) return TREATS[i];
+                        }
+                        return TREATS[0];
+                    };
+                    var fallSpeed = function() {
+                        return Math.min(26 + level * 4, 58);
+                    };
+                    var spawnInterval = function() {
+                        return Math.max(0.5, 1.2 - level * 0.09);
+                    };
+                    var elapsedSeconds = function() {
+                        if (!running || !clockStartedAt) return clockBase;
+                        return clockBase + Math.floor((Date.now() - clockStartedAt) / 1000);
                     };
                     var formatTime = function(total) {
                         var minutes = Math.floor(total / 60)
                           , seconds = total % 60;
                         return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
                     };
-                    var elapsedSeconds = function() {
-                        if (!running || !clockStartedAt) return clockBase;
-                        return clockBase + Math.floor((Date.now() - clockStartedAt) / 1000);
-                    };
-                    var elapsed = function() {
-                        return formatTime(elapsedSeconds());
-                    };
                     var addEvent = function(text, icon) {
                         var item = document.createElement('li')
                           , time = document.createElement('time')
                           , span = document.createElement('span');
-                        time.textContent = '[' + elapsed() + '] ';
+                        time.textContent = '[' + formatTime(elapsedSeconds()) + '] ';
                         span.textContent = (icon ? icon + ' ' : '') + text;
                         item.appendChild(time);
                         item.appendChild(span);
@@ -2323,234 +3078,403 @@
                     var updateStats = function() {
                         scoreEl.textContent = score;
                         livesEl.textContent = lives;
-                        timeEl.textContent = formatTime(elapsedSeconds());
+                        comboEl.textContent = 'x' + combo;
+                        quizStatEl.textContent = quizCorrect + '/' + quizAnswered;
                     };
                     var setControls = function() {
-                        startEl.disabled = running && !gameOver;
-                        stopEl.disabled = !running || gameOver;
-                    };
-                    var setChoicesDisabled = function(disabled) {
-                        Array.prototype.forEach.call(track.querySelectorAll('button'), function(button) {
-                            if (!button.classList.contains('is-revealed')) button.disabled = disabled;
+                        startEl.disabled = (running && !gameOver) || quizOpen;
+                        stopEl.disabled = !running || gameOver || quizOpen;
+                        howEl.disabled = quizOpen;
+                        howEl.textContent = field.classList.contains('is-intro') ? 'Hide rules' : 'How to play';
+                        Array.prototype.forEach.call(laneWrap.querySelectorAll('button'), function(button) {
+                            button.disabled = quizOpen;
                         });
                     };
-                    var highlightTunnel = function(index) {
-                        var buttons = track.querySelectorAll('button'), i;
-                        highlightedIndex = index;
-                        for (i = 0; i < buttons.length; i++) {
-                            if (i == index && !buttons[i].disabled) buttons[i].classList.add('is-hot');
-                            else buttons[i].classList.remove('is-hot');
-                        }
-                    };
-                    var clearHighlight = function() {
-                        highlightedIndex = -1;
-                        Array.prototype.forEach.call(track.querySelectorAll('button'), function(button) {
-                            button.classList.remove('is-hot');
+                    var setLane = function(next, withSound) {
+                        var target = Math.max(0, Math.min(LANES - 1, next))
+                          , lean = target > bunnyLane ? 'lean-right' : 'lean-left';
+                        if (target === bunnyLane) return;
+                        bunnyLane = target;
+                        bunny.classList.remove('lean-left', 'lean-right');
+                        bunny.classList.add(lean);
+                        if (leanTimer) clearTimeout(leanTimer);
+                        leanTimer = setTimeout(function() {
+                            bunny.classList.remove('lean-left', 'lean-right');
+                        }, 190);
+                        bunny.style.setProperty('--bunny-lane', bunnyLane);
+                        Array.prototype.forEach.call(laneWrap.querySelectorAll('button'), function(button, i) {
+                            if (i === bunnyLane) button.classList.add('is-active');
+                            else button.classList.remove('is-active');
                         });
+                        if (withSound) audio.move();
                     };
-                    var wanderRabbit = function(logMove) {
-                        if (!running || locked || gameOver || !round.length) return;
-                        var index = randomInt(0, round.length - 1);
-                        setRunner(index);
-                        highlightTunnel(index);
-                        if (logMove) addEvent('Rabbit is sniffing around tunnel ' + (index + 1) + '.', '🐇');
+                    var popLabel = function(text, kind) {
+                        bunny.dataset.pop = text;
+                        bunny.classList.add('is-popping');
+                        bunny.classList.remove('is-treat', 'is-hit');
+                        if (kind) bunny.classList.add(kind);
+                        if (popTimer) clearTimeout(popTimer);
+                        popTimer = setTimeout(function() {
+                            bunny.classList.remove('is-popping', 'is-treat', 'is-hit');
+                            bunny.dataset.pop = '';
+                        }, 750);
                     };
-                    var startTimers = function() {
-                        if (!timer) timer = setInterval(updateStats, 1000);
-                        if (!actionTimer) actionTimer = setInterval(function() {
-                            if (!gameOver && !locked && running) randomAction(true);
-                        }, 3500);
-                        if (!wanderTimer) wanderTimer = setInterval(function() {
-                            wanderRabbit(false);
-                        }, 3600);
-                    };
-                    var stopTimers = function() {
-                        if (timer) {
-                            clearInterval(timer);
-                            timer = null;
+                    var clearItems = function() {
+                        for (var i = 0; i < items.length; i++) {
+                            if (items[i].el.parentNode) items[i].el.parentNode.removeChild(items[i].el);
                         }
-                        if (actionTimer) {
-                            clearInterval(actionTimer);
-                            actionTimer = null;
+                        items = [];
+                    };
+                    var spawn = function() {
+                        var treat = pickTreat()
+                          , lane = randomInt(0, LANES - 1)
+                          , el = document.createElement('div');
+                        el.className = 'falling-item';
+                        el.style.setProperty('--lane', lane);
+                        el.style.top = '0%';
+                        el.textContent = treat.symbol;
+                        sky.appendChild(el);
+                        items.push({ el: el, treat: treat, lane: lane, y: 0 });
+                    };
+                    var applyOutcome = function(entry) {
+                        var treat = entry.treat, gained;
+                        if (treat.good) {
+                            combo = Math.min(combo + 1, MAX_COMBO);
+                            gained = treat.points * combo;
+                            score += gained;
+                            if (treat.lives) lives = Math.min(lives + treat.lives, MAX_LIVES);
+                            popLabel('\u2728 +' + gained, 'is-treat');
+                            audio.treat(combo);
+                            if (combo >= 3) audio.comboUp();
+                            addEvent(treat.label + ' caught. +' + gained + ' points at x' + combo + '.', treat.symbol);
+                            messageEl.textContent = treat.label + ' caught. +' + gained + ' points.';
+                        } else {
+                            combo = 1;
+                            score = Math.max(0, score + treat.points);
+                            if (treat.lives) lives += treat.lives;
+                            popLabel(treat.lives ? '\uD83D\uDCA2 -1 life' : '\uD83D\uDCA2 ' + treat.points, 'is-hit');
+                            if (treat.lives) audio.lifeLost();
+                            else audio.hazard();
+                            addEvent(treat.label + ' hit. ' + (treat.lives ? '-1 life.' : treat.points + ' points.'), treat.symbol);
+                            messageEl.textContent = treat.label + ' hit. ' + (treat.lives ? 'One life lost.' : treat.points + ' points.');
                         }
-                        if (wanderTimer) {
-                            clearInterval(wanderTimer);
-                            wanderTimer = null;
-                        }
+                        updateStats();
                     };
-                    var setAction = function(action) {
-                        var classes = ['action-smell', 'action-jump', 'action-roll', 'action-think'], i;
-                        for (i = 0; i < classes.length; i++) runner.classList.remove(classes[i]);
-                        runner.classList.add('action-' + action);
-                        runner.dataset.actionLabel = action == 'smell' ? 'sniff sniff' : (action == 'think' ? 'thinking...' : action);
-                        if (action == 'jump') runner.style.setProperty('--rabbit-top', (randomInt(5, 13) / 10) + 'rem');
-                    };
-                    var randomAction = function(logAction) {
-                        var actions = ['smell', 'jump', 'roll', 'think']
-                          , action = actions[randomInt(0, actions.length - 1)];
-                        setAction(action);
-                        if (logAction) addEvent('Rabbit action: ' + action + '.');
-                    };
-                    var setRunner = function(index) {
-                        var count = Math.max(round.length, 1)
-                          , percent = count == 1 ? 0 : (index / (count - 1)) * 100
-                          , left;
-                        if (index === 0) left = '0.75rem';
-                        else if (index === count - 1) left = 'calc(100% - 2.9rem)';
-                        else left = 'calc(' + percent + '% - 1.075rem)';
-                        runner.style.setProperty('--rabbit-left', left);
-                        gameCursor.style.setProperty('--cursor-left', index === count - 1 ? 'calc(100% - 2rem)' : (index === 0 ? '1.5rem' : 'calc(' + percent + '% - 0.1rem)'));
-                        gameCursor.style.setProperty('--cursor-top', '3rem');
-                    };
-                    var renderRound = function(isPreview) {
-                        var i, choice, button, symbol, label, count = randomInt(2, 5);
-                        round = [];
-                        locked = false;
-                        track.innerHTML = '';
-                        track.style.setProperty('--choice-count', count);
-                        for (i = 0; i < count; i++) {
-                            choice = pickOutcome();
-                            round.push(choice);
-                            button = document.createElement('button');
-                            button.type = 'button';
-                            button.className = 'tunnel-choice';
-                            button.dataset.index = i;
-                            button.setAttribute('aria-label', 'Choose tunnel ' + (i + 1));
-                            symbol = document.createElement('span');
-                            symbol.className = 'choice-symbol';
-                            symbol.textContent = '?';
-                            button.appendChild(symbol);
-                            button.insertAdjacentHTML('beforeend', '<img class="tunnel-image" src="images/tunnel.svg" alt="" aria-hidden="true"/>');
-                            label = document.createElement('span');
-                            label.textContent = 'Tunnel ' + (i + 1);
-                            button.appendChild(label);
-                            button.disabled = !running;
-                            button.addEventListener('click', chooseTunnel);
-                            track.appendChild(button);
-                        }
-                        setRunner(0);
-                        randomAction(false);
-                        highlightTunnel(0);
-                        if (isPreview) {
-                            messageEl.textContent = 'Press Start to open the first set of tunnels.';
-                            return;
-                        }
-                        messageEl.textContent = 'The rabbit found ' + count + ' tunnels. Choose one.';
-                        addEvent('Round opened with ' + count + ' tunnels.', '🕳️');
-                        setTimeout(function() { wanderRabbit(false); }, 250);
-                    };
-                    var finishGame = function(text) {
+                    var finishGame = function(reason) {
                         gameOver = true;
-                        locked = true;
+                        running = false;
                         clockBase = elapsedSeconds();
                         clockStartedAt = null;
-                        running = false;
-                        stopTimers();
-                        messageEl.textContent = text + ' Final score: ' + score + '.';
-                        addEvent(text + ' Game over with score ' + score + '.', '💥');
-                        Array.prototype.forEach.call(track.querySelectorAll('button'), function(button) {
-                            button.disabled = true;
-                        });
+                        stopLoop();
+                        audio.stopMusic();
+                        audio.gameOver();
+                        var accuracy = quizAnswered ? Math.round((quizCorrect / quizAnswered) * 100) : 0;
+                        messageEl.textContent = reason + ' Final score ' + score + '. Brain breaks ' + quizCorrect + '/' + quizAnswered + ' (' + accuracy + '%). Press Restart to play again.';
+                        addEvent(reason + ' Final score ' + score + ', brain breaks ' + quizCorrect + '/' + quizAnswered + '.', '🏁');
                         updateStats();
                         setControls();
                     };
-                    var chooseTunnel = function(event) {
-                        var button = event.currentTarget
-                          , index = parseInt(button.dataset.index, 10)
-                          , outcome = round[index]
-                          , buttons = track.querySelectorAll('button');
-                        if (!running || locked || gameOver || !outcome) return;
-                        if (index !== highlightedIndex) {
-                            messageEl.textContent = 'Wait for the bunny to hop over that tunnel first.';
-                            addEvent('Selection blocked. Bunny is not on tunnel ' + (index + 1) + '.', '🐇');
-                            return;
-                        }
-                        locked = true;
-                        setRunner(index);
-                        clearHighlight();
-                        randomAction(true);
-                        Array.prototype.forEach.call(buttons, function(item) {
-                            item.disabled = true;
-                        });
-                        button.classList.add('is-selected', 'is-revealed');
-                        button.querySelector('.choice-symbol').textContent = outcome.symbol;
-                        button.lastElementChild.textContent = outcome.label;
-                        score += outcome.points || 0;
-                        lives += outcome.lives || 0;
-                        addEvent('Tunnel ' + (index + 1) + ' revealed ' + outcome.label + '. ' + outcome.message, outcome.symbol);
-                        if (lives < 1) {
+                    var resolveItem = function(entry, index) {
+                        items.splice(index, 1);
+                        if (entry.el.parentNode) entry.el.parentNode.removeChild(entry.el);
+                        resolvedCount++;
+                        if (entry.lane === bunnyLane) {
+                            applyOutcome(entry);
+                            if (lives < 1) {
+                                finishGame('The bunny ran out of lives.');
+                                return;
+                            }
+                        } else if (entry.treat.good) {
+                            combo = 1;
                             updateStats();
-                            finishGame(outcome.message + ' No lives left.');
-                            return;
+                        } else {
+                            score += 1;
+                            updateStats();
+                        }
+                        if (resolvedCount % QUIZ_EVERY === 0) openQuiz();
+                    };
+                    var step = function(timestamp) {
+                        rafId = null;
+                        if (!running || quizOpen) return;
+                        var delta = lastFrame ? Math.min((timestamp - lastFrame) / 1000, 0.05) : 0
+                          , distance = fallSpeed() * delta
+                          , i;
+                        lastFrame = timestamp;
+                        spawnAcc += delta;
+                        if (spawnAcc >= spawnInterval()) {
+                            spawnAcc = 0;
+                            spawn();
+                        }
+                        for (i = items.length - 1; i >= 0; i--) {
+                            if (!items[i]) continue;
+                            items[i].y += distance;
+                            if (items[i].y >= CATCH_LINE) {
+                                resolveItem(items[i], i);
+                                if (!running || quizOpen) return;
+                            } else {
+                                items[i].el.style.top = items[i].y + '%';
+                            }
+                        }
+                        rafId = requestAnimationFrame(step);
+                    };
+                    var startLoop = function() {
+                        lastFrame = 0;
+                        if (!rafId) rafId = requestAnimationFrame(step);
+                    };
+                    var stopLoop = function() {
+                        if (rafId) {
+                            cancelAnimationFrame(rafId);
+                            rafId = null;
+                        }
+                    };
+
+                    var pickQuestion = function() {
+                        var setIndex = checkpointCount % QUIZ_SETS.length
+                          , set = QUIZ_SETS[setIndex]
+                          , seen = askedQuestions[setIndex]
+                          , pool = []
+                          , i;
+                        if (seen.length >= set.questions.length) {
+                            seen.length = 0;
+                        }
+                        for (i = 0; i < set.questions.length; i++) {
+                            if (seen.indexOf(i) === -1) pool.push(i);
+                        }
+                        var chosen = pool[randomInt(0, pool.length - 1)];
+                        seen.push(chosen);
+                        return { tag: set.tag, question: set.questions[chosen] };
+                    };
+                    var buildOptions = function(question) {
+                        var list = [], i, j, swap;
+                        for (i = 0; i < question.options.length; i++) {
+                            list.push({ text: question.options[i], correct: i === question.answer });
+                        }
+                        for (i = list.length - 1; i > 0; i--) {
+                            j = randomInt(0, i);
+                            swap = list[i];
+                            list[i] = list[j];
+                            list[j] = swap;
+                        }
+                        return list;
+                    };
+                    var closeQuiz = function() {
+                        quizOpen = false;
+                        overlay.hidden = true;
+                        field.classList.remove('is-quiz');
+                        audio.duckMusic(false);
+                        level++;
+                        setControls();
+                        if (!gameOver && running) {
+                            messageEl.textContent = 'Back to the field. Speed is up a notch.';
+                            startLoop();
+                        }
+                        startEl.focus();
+                    };
+                    var answerQuiz = function(button, option, question) {
+                        if (button.disabled) return;
+                        quizAnswered++;
+                        Array.prototype.forEach.call(qOptions.querySelectorAll('button'), function(other) {
+                            other.disabled = true;
+                            if (other.dataset.correct === 'true') other.classList.add('is-correct');
+                        });
+                        if (option.correct) {
+                            quizCorrect++;
+                            score += 10;
+                            lives = Math.min(lives + 1, MAX_LIVES);
+                            audio.correct();
+                            qFeedback.innerHTML = '<b>Correct. +10 points and +1 life.</b> ' + question.why;
+                            addEvent('Brain break passed. +10 points, +1 life.', '✅');
+                        } else {
+                            button.classList.add('is-wrong');
+                            audio.wrong();
+                            qFeedback.innerHTML = '<b>Not quite.</b> ' + question.why;
+                            addEvent('Brain break missed. No bonus.', '❌');
                         }
                         updateStats();
-                        messageEl.textContent = outcome.message + ' Next tunnels opening...';
-                        setTimeout(function() {
-                            if (!gameOver && running) renderRound();
-                        }, 3000);
+                        qContinue.hidden = false;
+                        qContinue.focus();
                     };
+                    var openQuiz = function() {
+                        if (quizOpen || gameOver) return;
+                        quizOpen = true;
+                        stopLoop();
+                        clearItems();
+                        field.classList.remove('is-intro');
+                        field.classList.add('is-quiz');
+                        audio.duckMusic(true);
+                        audio.checkpoint();
+                        var picked = pickQuestion()
+                          , question = picked.question
+                          , list = buildOptions(question)
+                          , markers = ['A', 'B', 'C', 'D'];
+                        checkpointCount++;
+                        qTag.textContent = picked.tag;
+                        qQuestion.textContent = question.q;
+                        qOptions.innerHTML = '';
+                        qFeedback.textContent = 'Answer correctly for +10 points and an extra life.';
+                        qContinue.hidden = true;
+                        list.forEach(function(option, i) {
+                            var button = document.createElement('button');
+                            button.type = 'button';
+                            button.className = 'quiz-option';
+                            button.dataset.marker = markers[i];
+                            button.dataset.correct = option.correct ? 'true' : 'false';
+                            button.textContent = option.text;
+                            button.addEventListener('click', function() {
+                                answerQuiz(button, option, question);
+                            });
+                            qOptions.appendChild(button);
+                        });
+                        overlay.hidden = false;
+                        messageEl.textContent = 'Brain break. Answer to earn a bonus, then the field speeds up.';
+                        addEvent(picked.tag + ' reached.', '🧪');
+                        setControls();
+                        var first = qOptions.querySelector('button');
+                        if (first) first.focus();
+                    };
+
                     var startGame = function() {
-                        if (running) return;
+                        if (running || quizOpen) return;
+                        audio.unlock();
                         if (!startedOnce || gameOver) {
                             score = 0;
-                            lives = 1;
+                            lives = 3;
+                            combo = 1;
+                            level = 0;
+                            resolvedCount = 0;
+                            quizCorrect = 0;
+                            quizAnswered = 0;
+                            askedQuestions = [[], [], []];
+                            checkpointCount = 0;
                             clockBase = 0;
-                            logEl.innerHTML = '';
+                            spawnAcc = 0;
                             gameOver = false;
-                            locked = false;
                             startedOnce = true;
-                            running = true;
-                            clockStartedAt = Date.now();
-                            updateStats();
-                            addEvent('Rabbit Tunnel started.', '🐇');
-                            renderRound();
+                            logEl.innerHTML = '';
+                            clearItems();
+                            setLane(1, false);
+                            addEvent('Feed the Bunny started.', '🐇');
+                            messageEl.textContent = 'Go. Catch the treats, dodge the hazards.';
                         } else {
-                            running = true;
-                            locked = false;
-                            clockStartedAt = Date.now();
-                            if (track.querySelector('.is-revealed')) renderRound();
-                            else setChoicesDisabled(false);
-                            messageEl.textContent = 'Rabbit Tunnel resumed. Choose a tunnel.';
-                            addEvent('Rabbit Tunnel resumed.', '🐇');
+                            messageEl.textContent = 'Resumed. Keep the combo alive.';
+                            addEvent('Game resumed.', '▶️');
                         }
-                        startTimers();
-                        setControls();
+                        running = true;
+                        field.classList.remove('is-intro');
+                        clockStartedAt = Date.now();
+                        audio.startMusic();
                         updateStats();
+                        setControls();
+                        startLoop();
                     };
                     var stopGame = function() {
-                        if (!running) return;
+                        if (!running || quizOpen) return;
+                        running = false;
                         clockBase = elapsedSeconds();
                         clockStartedAt = null;
-                        running = false;
-                        locked = true;
-                        stopTimers();
-                        setChoicesDisabled(true);
-                        clearHighlight();
-                        messageEl.textContent = 'Rabbit Tunnel stopped. Press Start to continue.';
-                        addEvent('Rabbit Tunnel stopped.', '⏸️');
-                        updateStats();
+                        stopLoop();
+                        audio.stopMusic();
+                        messageEl.textContent = 'Paused. Press Start to carry on.';
+                        addEvent('Game paused.', '⏸️');
                         setControls();
                     };
                     var resetIdle = function() {
-                        stopTimers();
+                        running = false;
+                        quizOpen = false;
+                        gameOver = false;
+                        startedOnce = false;
+                        stopLoop();
+                        audio.stopMusic();
+                        clearItems();
+                        overlay.hidden = true;
+                        field.classList.remove('is-quiz');
+                        field.classList.add('is-intro');
                         score = 0;
-                        lives = 1;
+                        lives = 3;
+                        combo = 1;
+                        level = 0;
+                        resolvedCount = 0;
+                        quizCorrect = 0;
+                        quizAnswered = 0;
+                        askedQuestions = [[], [], []];
+                        checkpointCount = 0;
                         clockBase = 0;
                         clockStartedAt = null;
-                        gameOver = false;
-                        locked = false;
-                        running = false;
-                        startedOnce = false;
+                        spawnAcc = 0;
                         logEl.innerHTML = '';
-                        renderRound(true);
-                        setAction('think');
+                        bunnyLane = -1;
+                        setLane(1, false);
+                        messageEl.textContent = 'Carrots, blueberries and toys feed the bunny. Poop, lizards, snakes and land mines do not.';
                         updateStats();
                         setControls();
                     };
 
                     startEl.addEventListener('click', startGame);
                     stopEl.addEventListener('click', stopGame);
-                    restartEl.addEventListener('click', resetIdle);
+                    restartEl.addEventListener('click', function() {
+                        resetIdle();
+                        startGame();
+                    });
+                    howEl.addEventListener('click', function() {
+                        if (quizOpen) return;
+                        if (field.classList.contains('is-intro')) {
+                            field.classList.remove('is-intro');
+                        } else {
+                            if (running) stopGame();
+                            field.classList.add('is-intro');
+                        }
+                        setControls();
+                    });
+                    qContinue.addEventListener('click', closeQuiz);
+                    soundEl.addEventListener('click', function() {
+                        var next = !audio.isOn();
+                        audio.setEnabled(next);
+                        soundEl.setAttribute('aria-pressed', next ? 'true' : 'false');
+                        soundEl.innerHTML = next ? '🔊 Sound' : '🔇 Muted';
+                        if (next && running && !quizOpen) audio.startMusic();
+                    });
+                    laneWrap.addEventListener('click', function(event) {
+                        var button = event.target.closest ? event.target.closest('button') : null;
+                        if (!button || button.disabled) return;
+                        setLane(parseInt(button.dataset.lane, 10), true);
+                    });
+                    sky.addEventListener('click', function(event) {
+                        if (!running || quizOpen) return;
+                        var rect = sky.getBoundingClientRect();
+                        if (!rect.width) return;
+                        setLane(Math.floor(((event.clientX - rect.left) / rect.width) * LANES), true);
+                    });
+                    on('keydown', function(event) {
+                        if (quizOpen || !running) return;
+                        var key = event.key;
+                        if (key === 'ArrowLeft' || key === 'a' || key === 'A') {
+                            setLane(bunnyLane - 1, true);
+                            event.preventDefault();
+                        } else if (key === 'ArrowRight' || key === 'd' || key === 'D') {
+                            setLane(bunnyLane + 1, true);
+                            event.preventDefault();
+                        }
+                    });
+                    overlay.addEventListener('keydown', function(event) {
+                        if (event.key !== 'Tab') return;
+                        var focusable = overlay.querySelectorAll('button:not([disabled]):not([hidden])');
+                        if (!focusable.length) return;
+                        var first = focusable[0]
+                          , last = focusable[focusable.length - 1];
+                        if (event.shiftKey && document.activeElement === first) {
+                            last.focus();
+                            event.preventDefault();
+                        } else if (!event.shiftKey && document.activeElement === last) {
+                            first.focus();
+                            event.preventDefault();
+                        }
+                    });
+                    document.addEventListener('visibilitychange', function() {
+                        if (document.hidden && running && !quizOpen) stopGame();
+                    });
+
+                    soundEl.setAttribute('aria-pressed', audio.isOn() ? 'true' : 'false');
+                    soundEl.innerHTML = audio.isOn() ? '🔊 Sound' : '🔇 Muted';
                     resetIdle();
                 }());
                 on('load', function() {

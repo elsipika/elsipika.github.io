@@ -32,6 +32,26 @@ Single `index.html` file. All CSS is inline in `<style>`. All JS is inline in `<
 - `#buttons02` — CTA buttons on home (Resume, GitHub)
 - `#icons01` — footer social icon circles
 
+## Mini game — Feed the Bunny
+
+Lives at the end of `#home-section`, anchored by `<div data-scroll-id="mini-game">`. Self-contained IIFE in the main `<script>` block; nothing outside it references the game.
+
+**Loop:** treats and hazards fall down 4 lanes; move the bunny with `←`/`→`, the lane buttons, or by tapping the field. Catching a treat scores `points × combo` (combo caps at x5); catching a hazard resets the combo and can cost a life. Dodging a hazard is worth +1. Missing a treat breaks the combo.
+
+**Brain breaks:** every 12 resolved items the field clears and a quiz overlay opens. `QUIZ_SETS` holds three categories — QA, IQ, Frontend — 12 questions each, cycled in order by `checkpointCount`, shuffled options, no repeats until a set is exhausted. A correct answer is +10 points and +1 life; a wrong one costs nothing and shows the explanation. Each break also bumps `level`, which raises fall speed and spawn rate.
+
+The user-facing name is **"brain break"**, shown as `Brain break · QA` from each set's `tag`. Keep it category-neutral outside the tag — the fourth stat tile is labelled `Quiz` and counts all three categories, so wording like "QA checkpoints" there would be wrong.
+
+**Intro panel:** `#intro-panel` is the idle view — it lists every item's point value, the controls, combo, lives and brain-break rules. `.bunny-field` carries `is-intro` in the HTML so the rules show even before JS runs. Start dismisses it; the `How to play` button toggles it back (pausing a run first). Its point values are hand-written, so they must be kept in sync with `TREATS` — the test suite asserts they match.
+
+**Bunny sprite gotcha:** `images/rabbit.gif` is 32×32 with the GIF transparency flag **off**, so it renders as an opaque white square. It is clipped to a circle via `border-radius: 50%` on the `img` plus `image-rendering: pixelated` to stay crisp when upscaled. Don't remove that clipping expecting a transparent sprite.
+
+**Audio:** synthesized at runtime via Web Audio — no files. A square-lead/triangle-bass loop over Am–F–C–G plus per-event effects. Starts only on the Start click (never on page load) and the mute state persists in `localStorage` under `bunny-sound`.
+
+**Key IDs:** `#bunny-field`, `#field-sky`, `#bunny-runner`, `#lane-buttons`, `#quiz-overlay`, `#bunny-score` / `-lives` / `-combo` / `-quiz`, `#bunny-start` / `-stop` / `-restart` / `-sound`.
+
+**Gotcha:** `step()` clears `rafId` at the top of every frame. Anything that stops the loop mid-frame (a checkpoint, game over) must return without rescheduling, or `startLoop()` sees a stale `rafId` and the game silently freezes.
+
 ## SVG icons
 
 Defined inline in `<svg display="none">`. Current icons:
